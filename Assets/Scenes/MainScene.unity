@@ -2636,9 +2636,10 @@ GameObject:
   - component: {fileID: 1681096853}
   - component: {fileID: 1681096854}
   - component: {fileID: 1681096855}
+  - component: {fileID: 1681096856}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2738,8 +2739,20 @@ MonoBehaviour:
   speed: 5
   horizontalInput: 0
   verticalInput: 0
-  bomPrefab: {fileID: 1555995949513353589, guid: 05bccb5b4e1e4aa40af450bc54f6d079, type: 3}
 --- !u!114 &1681096855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681096850}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38d23c3568500e48b8af8bcfa3085fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilemap: {fileID: 98875067}
+--- !u!114 &1681096856
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2748,10 +2761,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1681096850}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e38d23c3568500e48b8af8bcfa3085fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 1027071db7895b847a03ea50a8c8b116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilemap: {fileID: 98875067}
+  bombPrefab: {fileID: 1555995949513353589, guid: 05bccb5b4e1e4aa40af450bc54f6d079, type: 3}
+  bombRemaining: 0
+  bombAmount: 2
+  timeFuse: 2
 --- !u!1 &1707976394
 GameObject:
   m_ObjectHideFlags: 0

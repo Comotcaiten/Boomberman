@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     public float verticalInput;
     private Rigidbody2D playerRb;
 
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -27,9 +26,4 @@ public class PlayerController : MonoBehaviour
 
         playerRb.linearVelocity =  ((Vector2.up * verticalInput) + (Vector2.right * horizontalInput)) * speed;
     }
-
-    // void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     Debug.Log($"name: {collision.gameObject.name}");
-    // }
 }

@@ -8,6 +8,7 @@ TagManager:
   - Destruction
   - Floor
   - Flame
+  - Bomb
   layers:
   - Default
   - TransparentFX
