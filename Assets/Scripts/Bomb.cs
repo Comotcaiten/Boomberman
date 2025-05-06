@@ -4,22 +4,26 @@ using UnityEngine.Tilemaps;
 
 public class Bomb : MonoBehaviour
 {
-    private CircleCollider2D bombCollider;
-    private CircleCollider2D bomberCollider;
+    [SerializeField] private CircleCollider2D bombCollider;
+    [SerializeField] private CircleCollider2D bomberCollider;
 
     public float timeDestory = 2.0f;
 
-    public Tilemap tileDestruction;
+    [SerializeField] private Tilemap tileDestruction;
+    [SerializeField] private Tilemap tileIndestructions;
 
     public GameObject flameStartPrefab;
     public GameObject flameMiddlePrefab;
 
     private bool playerInside;
 
+    [SerializeField] private int rangeDestruct = 2;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         tileDestruction = GameObject.Find("Destruction").GetComponent<Tilemap>();
+        tileIndestructions = GameObject.Find("Indestruction").GetComponent<Tilemap>();
 
         bombCollider = GetComponent<CircleCollider2D>();
         bomberCollider = GameObject.Find("Player").GetComponent<CircleCollider2D>();
@@ -50,15 +54,14 @@ public class Bomb : MonoBehaviour
         Debug.Log("DestroyAfter");
 
         Vector3Int center = tileDestruction.WorldToCell(transform.position);
-        int range = 1   ; // bán kính nổ (2 ô mỗi hướng)
 
         // Nổ phần Up - Down
-        Explode(range, center, Vector3Int.up);
-        Explode(range, center, Vector3Int.down);
+        Explode(rangeDestruct, center, Vector3Int.up);
+        Explode(rangeDestruct, center, Vector3Int.down);
 
         // Nổ phần Left - Right
-        Explode(range, center, Vector3Int.left);
-        Explode(range, center, Vector3Int.right);
+        Explode(rangeDestruct, center, Vector3Int.left);
+        Explode(rangeDestruct, center, Vector3Int.right);
 
 
         Destroy(gameObject);
@@ -75,13 +78,24 @@ public class Bomb : MonoBehaviour
         Instantiate(flamePrefab, position, Quaternion.identity);
     }
 
-    void Explode(int range, Vector3Int dir, Vector3Int path) 
+    void Explode(int range, Vector3Int start, Vector3Int path) 
     {
         for (int i = 1; i <= range; i++)
         {
-            Vector3Int linePos = dir + (path * i);
+            Vector3Int linePos = start + (path * i);
 
-            tileDestruction.SetTile(linePos, null);
+            TileBase tile = tileDestruction.GetTile(linePos);
+            TileBase tileInter = tileIndestructions.GetTile(linePos);
+
+            // Kiểm tra xem có vật thể nào không cho phá chặn ở phía trước không
+            if (tileInter != null) return;
+
+            // Phá các bức tường cho phép
+            if (tile != null)
+            {
+                tileDestruction.SetTile(linePos, null);
+                return;
+            }
         }
     }
 }

@@ -101,10 +101,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c5de7f14c56ce9499f8b037645adc2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bombCollider: {fileID: 0}
+  bomberCollider: {fileID: 0}
   timeDestory: 4
   tileDestruction: {fileID: 0}
   flameStartPrefab: {fileID: 4568002863815276195, guid: d665c0bb7e707664ebfa3c5448f2751d, type: 3}
   flameMiddlePrefab: {fileID: 5756831722810689626, guid: ac78df3a9b9c29241bb0ea730683825d, type: 3}
+  rangeDestruct: 3
 --- !u!58 &5247490233628745801
 CircleCollider2D:
   m_ObjectHideFlags: 0
