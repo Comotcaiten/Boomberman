@@ -20,13 +20,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        PlaceBomb();
     }
 
     void FixedUpdate()
     {
         MoveInput();
-        PlaceBomb();
+
     }
 
 

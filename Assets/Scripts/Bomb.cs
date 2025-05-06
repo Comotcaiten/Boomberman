@@ -4,10 +4,12 @@ using UnityEngine.Tilemaps;
 
 public class Bomb : MonoBehaviour
 {
-    
+
     public float timeDestory;
 
     public Tilemap tileDestruction;
+
+    public GameObject flameStart;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -19,41 +21,46 @@ public class Bomb : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    IEnumerator DestroyAfter() {
+    IEnumerator DestroyAfter()
+    {
         yield return new WaitForSeconds(5.0f);
 
-        // float posX = transform.position.x;
-        // float posY = transform.position.y;
+        Vector3Int center = tileDestruction.WorldToCell(transform.position);
+        int range = 2; // bán kính nổ (2 ô mỗi hướng)
 
-        // for (float i = (posX - 1); i < (posX + 2); i++) {
-        //     for (float j = (posY - 1); j < (posY + 2); j++) {
-        //         // Debug.Log($"pos: {i}, {j}");
+        // Phá tile ở vị trí tâm
+        tileDestruction.SetTile(center, null);
+        Debug.Log("Destroyed tile at: " + center);
 
-        //         Vector3Int pos = Vector3Int.zero;
-        //         pos.x = Mathf.RoundToInt(i);
-        //         pos.y = Mathf.RoundToInt(j);
+        // Hướng trái và phải (x)
+        for (int dx = 1; dx <= range; dx++)
+        {
+            Vector3Int posRight = new Vector3Int(center.x + dx, center.y, 0);
+            Vector3Int posLeft = new Vector3Int(center.x - dx, center.y, 0);
 
-        //         Debug.Log($"pos: {pos}");
+            tileDestruction.SetTile(posRight, null);
+            tileDestruction.SetTile(posLeft, null);
 
-        //         tileDestruction.SetTile(pos, null);
-        //     }
-        // }
+            Debug.Log("Destroyed tile at: " + posRight);
+            Debug.Log("Destroyed tile at: " + posLeft);
+        }
 
+        // Hướng lên và xuống (y)
+        for (int dy = 1; dy <= range; dy++)
+        {
+            Vector3Int posUp = new Vector3Int(center.x, center.y + dy, 0);
+            Vector3Int posDown = new Vector3Int(center.x, center.y - dy, 0);
 
-    // Vector3Int bombCellPos = tileDestruction.WorldToCell(transform.position);
+            tileDestruction.SetTile(posUp, null);
+            tileDestruction.SetTile(posDown, null);
 
-    // for (int dx = -1; dx <= 1; dx++) {
-    //     for (int dy = -1; dy <= 1; dy++) {
-    //         Vector3Int pos = new Vector3Int(bombCellPos.x + dx, bombCellPos.y + dy, 0);
-    //         Debug.Log($"Destroying tile at: {pos}");
-
-    //         tileDestruction.SetTile(pos, null);
-    //     }
-    // }
+            Debug.Log("Destroyed tile at: " + posUp);
+            Debug.Log("Destroyed tile at: " + posDown);
+        }
 
         Destroy(gameObject);
     }
-}   
+}
