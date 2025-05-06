@@ -42,10 +42,15 @@ public class PlayerController : MonoBehaviour
     void PlaceBomb() 
     {
         if (bomPrefab == null) return;
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Vector2 placePos = new Vector2(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
             Instantiate(bomPrefab, placePos, bomPrefab.transform.rotation);
         }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log($"name: {collision.gameObject.name}");
     }
 }
