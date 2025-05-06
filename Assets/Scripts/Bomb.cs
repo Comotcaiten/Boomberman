@@ -58,7 +58,7 @@ public class Bomb : MonoBehaviour
 
         Destroy(gameObject);
 
-        // Hiệu ứng nổ ở trung tâm quả bom
+        // Hiệu ứng nổ ở quả bom - start
         ExplodeAt(transform.position, flameStartPrefab);
     }
 
