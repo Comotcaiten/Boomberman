@@ -9,7 +9,8 @@ public class Bomb : MonoBehaviour
 
     public Tilemap tileDestruction;
 
-    public GameObject flameStart;
+    public GameObject flameStartPrefab;
+    public GameObject flameMiddlePrefab;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -18,15 +19,9 @@ public class Bomb : MonoBehaviour
         tileDestruction = GameObject.Find("Destruction").GetComponent<Tilemap>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     IEnumerator DestroyAfter()
     {
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(2.0f);
 
         Vector3Int center = tileDestruction.WorldToCell(transform.position);
         int range = 2; // bán kính nổ (2 ô mỗi hướng)
@@ -62,5 +57,16 @@ public class Bomb : MonoBehaviour
         }
 
         Destroy(gameObject);
+
+        // Hiệu ứng nổ ở trung tâm quả bom
+        ExplodeAt(transform.position, flameStartPrefab);
+    }
+
+    void ExplodeAt(Vector2 position, GameObject flamePrefab)
+    {
+        Vector3Int cellPos = tileDestruction.WorldToCell(position);
+        tileDestruction.SetTile(cellPos, null);
+
+        Instantiate(flamePrefab, position, Quaternion.identity);
     }
 }

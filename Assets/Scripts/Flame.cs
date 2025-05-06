@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Flame : MonoBehaviour
@@ -5,12 +6,18 @@ public class Flame : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Destroy(gameObject);
+        StartCoroutine(DestroyAfter());
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    IEnumerator DestroyAfter() {
+        yield return new WaitForSeconds(1.0f);
+
+        Destroy(gameObject);
     }
 }
