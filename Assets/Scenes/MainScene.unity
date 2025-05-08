@@ -2746,7 +2746,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.495
+  m_Radius: 0.5
 --- !u!114 &1681096854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2760,8 +2760,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  horizontalInput: 0
-  verticalInput: 0
   animator: {fileID: 35400658}
 --- !u!114 &1681096855
 MonoBehaviour:

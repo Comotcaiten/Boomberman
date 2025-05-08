@@ -111,7 +111,7 @@ MonoBehaviour:
   flameMiddlePrefab: {fileID: 5756831722810689626, guid: ac78df3a9b9c29241bb0ea730683825d, type: 3}
   flameEndPrefab: {fileID: 990359993131000127, guid: 827f2e6dd86b80f43b512307b93f26e2, type: 3}
   brickDestroyPrefab: {fileID: 4158315459778862941, guid: 409f53df45839aa46856dc537e36cbba, type: 3}
-  rangeDestruct: 3
+  rangeDestruct: 1
 --- !u!58 &5247490233628745801
 CircleCollider2D:
   m_ObjectHideFlags: 0

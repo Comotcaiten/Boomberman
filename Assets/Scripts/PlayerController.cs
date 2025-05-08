@@ -27,7 +27,8 @@ public class PlayerController : MonoBehaviour
 
     void MoveInput()
     {
-        // if (isFainted) return;
+        if (isFainted) return;
+        
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
 

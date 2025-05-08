@@ -22,6 +22,7 @@ public class BombController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GetComponent<PlayerController>().GetIsFainted()) return;
         // Chỉ cho phép đặt đúng số lượng bomb nếu số lượng bomb (bombRemaining hết thì phải đợi hồi)
         if (bombRemaining > 0 && Input.GetKeyDown(KeyCode.Space))
         {
