@@ -29,5 +29,10 @@ public class Flame : MonoBehaviour
 
             collision.gameObject.GetComponent<PlayerController>().SetIsFainted(true);
         }
+        if (collision.gameObject.CompareTag("Enemy")) {
+            Debug.Log("Kill Enemy");
+
+            collision.gameObject.GetComponent<Enemy>();
+        }
     }
 }

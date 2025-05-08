@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
@@ -7,6 +8,7 @@ public abstract class Enemy : MonoBehaviour
     protected Vector2 moveDir;
     protected Rigidbody2D rb;
     protected CircleCollider2D collision2D;
+    protected bool isFainted = false;
 
 
     protected virtual void Start() {
@@ -17,6 +19,11 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void FixedUpdate() {
 
         Move();
+
+        if (isFainted) {
+            StartCoroutine(DeathAfter());
+            return;
+        }
         
     }
 
@@ -25,5 +32,11 @@ public abstract class Enemy : MonoBehaviour
     }
 
     protected abstract void Change();
+
+    IEnumerator DeathAfter() {
+        yield return new WaitForSeconds(1);
+
+        Destroy(gameObject);
+    }
 
 }
