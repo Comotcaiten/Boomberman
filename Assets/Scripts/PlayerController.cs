@@ -3,13 +3,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5.0f;
-    public float horizontalInput;
-    public float verticalInput;
+
+    private Vector2 moveInput = Vector2.zero;
     private Rigidbody2D playerRb;
 
-    private Animator animator;
+    [SerializeField] private Animator animator;
 
     private bool isFainted = false;
+
+    private Vector2 lastMovePos;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,16 +28,45 @@ public class PlayerController : MonoBehaviour
     void MoveInput()
     {
         // if (isFainted) return;
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        moveInput.x = Input.GetAxis("Horizontal");
+        moveInput.y = Input.GetAxis("Vertical");
 
-        playerRb.linearVelocity =  ((Vector2.up * verticalInput) + (Vector2.right * horizontalInput)) * speed;
+        animator.SetFloat("horizontal", moveInput.x);
+        animator.SetFloat("vertical", moveInput.y);
+        animator.SetFloat("speed", (moveInput.x * moveInput.x + moveInput.y * moveInput.y));
+
+        playerRb.linearVelocity = ((Vector2.up * moveInput.y) + (Vector2.right * moveInput.x)) * speed;
+
+        if (moveInput != Vector2.zero)
+        {
+            if (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y))
+            {
+                // Ưu tiên hướng ngang
+                lastMovePos.x = moveInput.x/Mathf.Abs(moveInput.x);
+                lastMovePos.y = 0;
+            }
+            else
+            {
+                // hướng dọc
+                lastMovePos.x = 0;
+                lastMovePos.y = moveInput.y/Mathf.Abs(moveInput.y);
+            }
+
+            animator.SetFloat("LastPosX", lastMovePos.x);
+            animator.SetFloat("LastPosY", lastMovePos.y);
+        }
+
     }
 
-    public void SetIsFainted(bool value) {
+    public void SetIsFainted(bool value)
+    {
         if (isFainted == true) return;
+        if (value == true) {
+            animator.SetBool("IsDead", true);
+        }
         isFainted = value;
     }
 
-    public bool GetIsFainted() {return isFainted;}
+    public bool GetIsFainted() { return isFainted; }
+
 }

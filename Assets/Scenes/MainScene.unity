@@ -2762,6 +2762,7 @@ MonoBehaviour:
   speed: 5
   horizontalInput: 0
   verticalInput: 0
+  animator: {fileID: 35400658}
 --- !u!114 &1681096855
 MonoBehaviour:
   m_ObjectHideFlags: 0
