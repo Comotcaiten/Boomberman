@@ -36,21 +36,19 @@ public class BombController : MonoBehaviour
         placePos.y = MathF.Round(placePos.y);
 
         // Kiểm tra xem ở vị trí hiện tại có một trái bomb chưa
-        for (int i = 0; i < bombsPos.Count; i++) {
-            // Nếu có thì không được đặt nữa
-            if (bombsPos[i] == placePos) {
-                yield break;
-            }
+        if (bombsPos.Contains(placePos)) {
+             yield break;
         }
 
         // Lấy 1 trái bomb ra
         bombRemaining--;
 
         // Set thời gian nổ của các trái bomb về sau giống nhau
-        bombPrefab.GetComponent<Bomb>().timeDestory = timeFuse;
+        // bombPrefab.GetComponent<Bomb>().timeDestory = timeFuse;
 
         GameObject bombObj = Instantiate(bombPrefab, placePos, bombPrefab.transform.rotation);
         Bomb bomb = bombObj.GetComponent<Bomb>();
+        bomb.timeDestory = timeFuse;
 
         // Lưu lại vị trí bomb thứ n vừa mới được đặt
         bombsPos.Add(placePos);

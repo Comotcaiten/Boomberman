@@ -7,7 +7,7 @@ public class Bomb : MonoBehaviour
     [SerializeField] private CircleCollider2D bombCollider;
     [SerializeField] private CircleCollider2D bomberCollider;
 
-    public float timeDestory = 2.0f;
+    public float timeDestory = 0f;
 
     [SerializeField] private Tilemap tileDestruction;
     [SerializeField] private Tilemap tileIndestructions;

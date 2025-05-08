@@ -7,6 +7,10 @@ public class PlayerController : MonoBehaviour
     public float verticalInput;
     private Rigidbody2D playerRb;
 
+    private Animator animator;
+
+    private bool isFainted = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -21,9 +25,17 @@ public class PlayerController : MonoBehaviour
 
     void MoveInput()
     {
+        // if (isFainted) return;
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 
         playerRb.linearVelocity =  ((Vector2.up * verticalInput) + (Vector2.right * horizontalInput)) * speed;
     }
+
+    public void SetIsFainted(bool value) {
+        if (isFainted == true) return;
+        isFainted = value;
+    }
+
+    public bool GetIsFainted() {return isFainted;}
 }
