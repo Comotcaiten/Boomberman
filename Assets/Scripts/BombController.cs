@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BombController : MonoBehaviour
@@ -8,6 +9,9 @@ public class BombController : MonoBehaviour
     public int bombRemaining;
     public int bombAmount = 1;
     public float timeFuse = 2.0f;
+
+
+    public List<Vector2> bombsPos;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -31,6 +35,14 @@ public class BombController : MonoBehaviour
         placePos.x = MathF.Round(placePos.x);
         placePos.y = MathF.Round(placePos.y);
 
+        // Kiểm tra xem ở vị trí hiện tại có một trái bomb chưa
+        for (int i = 0; i < bombsPos.Count; i++) {
+            // Nếu có thì không được đặt nữa
+            if (bombsPos[i] == placePos) {
+                yield break;
+            }
+        }
+
         // Lấy 1 trái bomb ra
         bombRemaining--;
 
@@ -38,14 +50,21 @@ public class BombController : MonoBehaviour
         bombPrefab.GetComponent<Bomb>().timeDestory = timeFuse;
 
         GameObject bombObj = Instantiate(bombPrefab, placePos, bombPrefab.transform.rotation);
-
         Bomb bomb = bombObj.GetComponent<Bomb>();
+
+        // Lưu lại vị trí bomb thứ n vừa mới được đặt
+        bombsPos.Add(placePos);
+        Debug.Log("Before: " + bombsPos);
 
         // Đợi thời gian nổ của các trái bomb về sau (lấy giá trị thời gian từ chính nó thay vì từ chính controller)
         yield return new WaitForSeconds(bomb.timeDestory);
 
         // Hồi lại một trái sau khi trái lấy ra đã nổ
         bombRemaining++;
+        
+        // Hủy vị trí sau khi nổ xong.
+        bombsPos.Remove(placePos);
+        Debug.Log("After: " + bombsPos);
 
     }
 }

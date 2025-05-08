@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
-
-public class Flame : MonoBehaviour
+public class BrickDestroy : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,13 +18,5 @@ public class Flame : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
 
         Destroy(gameObject);
-    }
-
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("GameOver");
-        }
     }
 }

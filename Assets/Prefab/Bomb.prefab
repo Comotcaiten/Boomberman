@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3985858146451873859}
   - component: {fileID: -6907567706866455565}
   - component: {fileID: 5247490233628745801}
+  - component: {fileID: 743891306541580191}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Bomb
@@ -103,10 +104,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bombCollider: {fileID: 0}
   bomberCollider: {fileID: 0}
-  timeDestory: 4
+  timeDestory: 2
   tileDestruction: {fileID: 0}
+  tileIndestructions: {fileID: 0}
   flameStartPrefab: {fileID: 4568002863815276195, guid: d665c0bb7e707664ebfa3c5448f2751d, type: 3}
   flameMiddlePrefab: {fileID: 5756831722810689626, guid: ac78df3a9b9c29241bb0ea730683825d, type: 3}
+  flameEndPrefab: {fileID: 990359993131000127, guid: 827f2e6dd86b80f43b512307b93f26e2, type: 3}
+  brickDestroyPrefab: {fileID: 4158315459778862941, guid: 409f53df45839aa46856dc537e36cbba, type: 3}
   rangeDestruct: 3
 --- !u!58 &5247490233628745801
 CircleCollider2D:
@@ -144,3 +148,25 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.495
+--- !u!95 &743891306541580191
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1555995949513353589}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e2b7f314a63ffbc46b66e460f671e4cb, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

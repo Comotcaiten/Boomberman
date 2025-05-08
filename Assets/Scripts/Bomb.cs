@@ -14,6 +14,8 @@ public class Bomb : MonoBehaviour
 
     public GameObject flameStartPrefab;
     public GameObject flameMiddlePrefab;
+    public GameObject flameEndPrefab;
+    public GameObject brickDestroyPrefab;
 
     private bool playerInside;
 
@@ -68,13 +70,24 @@ public class Bomb : MonoBehaviour
         Destroy(gameObject);
 
         // Hiệu ứng nổ ở quả bom - start
-        ExplodeEffAt(transform.position, flameStartPrefab, flameStartPrefab.transform.rotation);
+        ExplodeEffAt(flameStartPrefab, transform.position, Vector3Int.zero);
     }
 
-    void ExplodeEffAt(Vector2 position, GameObject flamePrefab, Quaternion rotation)
+    void ExplodeEffAt(GameObject flamePrefab, Vector2 position, Vector3Int path)
     {
-        Vector3Int cellPos = tileDestruction.WorldToCell(position);
-        tileDestruction.SetTile(cellPos, null);
+            Quaternion rotation = flamePrefab.transform.rotation;
+            if (path == Vector3Int.left)
+            {
+                rotation = Quaternion.Euler(0, 0, 180);
+            }
+            else if (path == Vector3Int.up)
+            {
+                rotation = Quaternion.Euler(0, 0, 90);
+            }
+            else if (path == Vector3Int.down)
+            {
+                rotation = Quaternion.Euler(0, 0, -90);
+            }
 
         Instantiate(flamePrefab, position, rotation);
     }
@@ -91,28 +104,19 @@ public class Bomb : MonoBehaviour
             // Kiểm tra xem có vật thể nào không cho phá chặn ở phía trước không
             if (tileInter != null) return;
 
-            Quaternion rotation = flameMiddlePrefab.transform.rotation;
-
-            if (path == Vector3Int.left)
-            {
-                rotation = Quaternion.Euler(0, 0, 180);
-            }
-            else if (path == Vector3Int.up)
-            {
-                rotation = Quaternion.Euler(0, 0, 90);
-            }
-            else if (path == Vector3Int.down)
-            {
-                rotation = Quaternion.Euler(0, 0, -90);
-            }
-
-            Instantiate(flameMiddlePrefab, tileDestruction.GetCellCenterWorld(tilePos), rotation);
-
             // Phá các bức tường cho phép
             if (tileDestr != null)
             {
+                ExplodeEffAt(brickDestroyPrefab, tileDestruction.GetCellCenterWorld(tilePos), Vector3Int.zero);
                 tileDestruction.SetTile(tilePos, null);
                 return;
+            }
+
+            if (i == range) {
+                ExplodeEffAt(flameEndPrefab, tileDestruction.GetCellCenterWorld(tilePos), path);
+            }
+            else {
+                ExplodeEffAt(flameMiddlePrefab, tileDestruction.GetCellCenterWorld(tilePos), path);
             }
 
         }
