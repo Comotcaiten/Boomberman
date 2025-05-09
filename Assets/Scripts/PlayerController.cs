@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
     void MoveInput()
     {
-        // if (isFainted) return;
+        if (isFainted) return;
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
 
@@ -63,10 +63,19 @@ public class PlayerController : MonoBehaviour
         if (isFainted == true) return;
         if (value == true) {
             animator.SetBool("IsDead", true);
+            speed = 0f;
+            playerRb.linearVelocity = Vector2.zero;
         }
         isFainted = value;
     }
 
     public bool GetIsFainted() { return isFainted; }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy")){
+            SetIsFainted(true);
+        }
+    }
 
 }

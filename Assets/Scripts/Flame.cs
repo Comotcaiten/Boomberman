@@ -32,7 +32,7 @@ public class Flame : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy")) {
             Debug.Log("Kill Enemy");
 
-            collision.gameObject.GetComponent<Enemy>();
+            collision.gameObject.GetComponent<Enemy>().SetIsFainted(true);
         }
     }
 }

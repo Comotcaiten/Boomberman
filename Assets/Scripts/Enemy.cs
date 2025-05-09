@@ -10,21 +10,24 @@ public abstract class Enemy : MonoBehaviour
     protected CircleCollider2D collision2D;
     protected bool isFainted = false;
 
-
+    [SerializeField] protected Animator animator;
     protected virtual void Start() {
         rb = GetComponent<Rigidbody2D>();
         collision2D = GetComponent<CircleCollider2D>();
     }
 
-    protected virtual void FixedUpdate() {
-
-        Move();
-
+    protected virtual void Update() {
         if (isFainted) {
-            StartCoroutine(DeathAfter());
             return;
         }
-        
+    }
+
+    protected virtual void FixedUpdate() {
+        if (isFainted) {
+            return;
+        }
+
+        Move();
     }
 
     protected virtual void Move() {
@@ -34,9 +37,25 @@ public abstract class Enemy : MonoBehaviour
     protected abstract void Change();
 
     IEnumerator DeathAfter() {
-        yield return new WaitForSeconds(1);
+
+        animator.SetBool("IsDeath", true);
+
+        yield return new WaitForSeconds(1.0f);
 
         Destroy(gameObject);
     }
+
+    public void SetIsFainted(bool value) {
+        isFainted = value;
+
+        if (isFainted) {
+            moveSpeed = 0f;
+            moveDir = Vector2.zero;
+
+            StartCoroutine(DeathAfter());
+        }
+    }
+
+    public bool GetIsFainted() {return isFainted;}
 
 }
