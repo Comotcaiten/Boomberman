@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
     public bool GetIsFainted() { return isFainted; }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)  
     {
         if (collision.gameObject.CompareTag("Enemy")){
             SetIsFainted(true);

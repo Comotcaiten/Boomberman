@@ -9,12 +9,6 @@ public class Flame : MonoBehaviour
         StartCoroutine(DestroyAfter());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     IEnumerator DestroyAfter() {
         yield return new WaitForSeconds(0.75f);
 

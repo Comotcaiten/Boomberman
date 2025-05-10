@@ -5,6 +5,13 @@ public class BallonEnemy: Enemy
     private float directionChangeInterval = 5.0f;
     private float timer;
 
+    private Vector2 []moveDirs = {
+        Vector2.up,
+        Vector2.down,
+        Vector2.right,
+        Vector2.left
+    }; 
+
     protected override void Start() {
         
         base.Start();
@@ -29,23 +36,22 @@ public class BallonEnemy: Enemy
 
     protected override void Change()
     {
-        int path = Random.Range(0,4);
+        int path = Random.Range(0,moveDirs.Length);
 
-        switch (path) {
-            case 0: 
-                moveDir = Vector2.up;
+        moveDir = moveDirs[path];
+
+        // Debug cho hướng di chuyển
+        switch (moveDir) {
+            case { x: 0, y: 1 }:
                 Debug.Log($"Đổi hướng: Lên");
                 break;
-            case 1:
-                moveDir = Vector2.down;
+            case { x: 0, y: -1 }:
                 Debug.Log($"Đổi hướng: Xuống");
                 break;
-            case 2: 
-                moveDir = Vector2.right;
+            case { x: 1, y: 0 }: 
                 Debug.Log($"Đổi hướng: Phải");  
                 break;
-            case 3:
-                moveDir = Vector2.left; 
+            case { x: -1, y: 0 }:
                 Debug.Log($"Đổi hướng: Trái");
                 break;
         }

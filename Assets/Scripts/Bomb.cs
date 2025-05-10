@@ -2,7 +2,7 @@
     using UnityEngine;
     using UnityEngine.Tilemaps;
 
-    public class Bomb : MonoBehaviour
+        public class Bomb : MonoBehaviour
     {
         [SerializeField] private CircleCollider2D bombCollider;
         [SerializeField] private CircleCollider2D bomberCollider;
