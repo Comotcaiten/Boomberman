@@ -19,7 +19,7 @@
 
         private bool playerInside;
 
-        [SerializeField] private int rangeDestruct = 2;
+        public int rangeDestruct = 1;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()

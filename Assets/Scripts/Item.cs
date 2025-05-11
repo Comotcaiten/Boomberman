@@ -1,19 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    protected abstract void Effect();
+    protected abstract IEnumerator Effect();
 
     protected void DestroyItem() {
         Destroy(gameObject);
@@ -23,9 +13,16 @@ public abstract class Item : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Effect();
+            PlayerController player = collision.GetComponent<PlayerController>();
+            if (player == null)
+            {
+                Debug.Log("PlayerController not found");
+                return;
+            }
+            player.StartCoroutine(Effect());
             DestroyItem();
         }
     }
 
 }
+

@@ -10,6 +10,7 @@ TagManager:
   - Flame
   - Bomb
   - Enemy
+  - Item
   layers:
   - Default
   - TransparentFX

@@ -7,8 +7,9 @@ public class BombController : MonoBehaviour
 {
     public GameObject bombPrefab;
     public int bombRemaining;
-    public int bombAmount = 1;
-    public float timeFuse = 2.0f;
+    private int bombAmount = 1;
+    private float timeFuse = 2.0f;
+    public int bombRange = 1;
 
 
     public List<Vector2> bombsPos;
@@ -17,6 +18,7 @@ public class BombController : MonoBehaviour
     void Start()
     {
         bombRemaining = bombAmount;
+        
     }
 
     // Update is called once per frame
@@ -49,6 +51,7 @@ public class BombController : MonoBehaviour
         GameObject bombObj = Instantiate(bombPrefab, placePos, bombPrefab.transform.rotation);
         Bomb bomb = bombObj.GetComponent<Bomb>();
         bomb.timeDestory = timeFuse;
+        bomb.rangeDestruct = Mathf.Max(bombRange, bomb.rangeDestruct);  
 
         // Lưu lại vị trí bomb thứ n vừa mới được đặt
         bombsPos.Add(placePos);
@@ -64,5 +67,17 @@ public class BombController : MonoBehaviour
         bombsPos.Remove(placePos);
         Debug.Log("After: " + bombsPos);
 
+    }
+
+    public void AddBombAmount(int amount)
+    {
+        bombAmount += amount;
+        bombRemaining += amount;
+    }
+
+    public void RemoveBombAmount(int amount)
+    {
+        bombAmount -= amount;
+        bombRemaining -= amount;
     }
 }
