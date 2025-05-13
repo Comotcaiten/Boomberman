@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,6 +30,14 @@ public class GameManager : MonoBehaviour
     public int levelIndex { get; private set; } = 1;
 
     private string path { get { return Application.dataPath + "/Levels/Level" + levelIndex + ".txt"; } }
+
+    private List<Enemy> enemies = new List<Enemy>();
+
+    private bool isGameOver = false;
+    public bool isGameWin {get; private set;} = false;
+    
+    private GameObject gameOverUI;
+
 
     private void Awake()
     {
@@ -96,6 +105,7 @@ public class GameManager : MonoBehaviour
                     SetTile(grassTilemap, grassTile, tilePos); // luôn vẽ grass dưới cùng
                 }
             }
+            
         }
         catch (System.Exception e)
         {
@@ -108,6 +118,11 @@ public class GameManager : MonoBehaviour
         destructibleTilemap = destruct;
         indestructibleTilemap = indestruct;
         grassTilemap = grass;
+    }
+
+    public void AssignGameOverUI(GameObject gameOver)
+    {
+        gameOverUI = gameOver;
     }
 
     private void SetTile(Tilemap tilemap, Tile tile, Vector3Int pos)
@@ -125,7 +140,20 @@ public class GameManager : MonoBehaviour
     {
         var obj = Instantiate(prefab, pos, Quaternion.identity);
         obj.name = name;
-        Debug.Log($"{name} spawned at {pos}");
+        // Debug.Log($"{name} spawned at {pos}");
+
+        if (prefab.CompareTag("Enemy"))
+        {
+            Enemy enemy = obj.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemies.Add(enemy);
+            }
+            else
+            {
+                Debug.LogError($"Prefab {name} does not have an Enemy component.");
+            }
+        }
     }
 
     private void SpawnItemWithBrick(GameObject itemPrefab, Vector3Int tilePos, Vector3 worldPos)
@@ -159,8 +187,36 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    public void LoadTileMMMM() {
-       Tilemap a = GameObject.Find("Tilemap").GetComponent<Tilemap>();
-       a.SetTile(new Vector3Int(0, 0, 0), wallTile);
+    public void GameOver()
+    {
+        if (isGameOver) return;
+
+        isGameOver = true;
+        Debug.Log("Game Over!");
+        // Handle game over logic here (e.g., show game over screen, reset level, etc.)
+
+        gameOverUI.SetActive(true);
+
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            enemies[i].FreezeMovement();
+        }
+    }
+
+    public void DebugEnemies()
+    {
+        Debug.Log($"Enemies count: {enemies.Count}");
+    }
+
+    public void UpdateEnemyCount()
+    {
+        enemies.RemoveAll(enemy => enemy.isFainted);
+        Debug.Log($"Enemies count after update: {enemies.Count}");
+
+        if (enemies.Count == 0)
+        {
+            Debug.Log("All enemies defeated!");
+            isGameWin = true;
+        }
     }
 }

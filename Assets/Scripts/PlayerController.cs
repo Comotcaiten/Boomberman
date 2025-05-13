@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5.0f;
+    private float moveSpeed;
 
     private Vector2 moveInput = Vector2.zero;
     private Rigidbody2D playerRb;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerRb = GetComponent<Rigidbody2D>();
+        moveSpeed = speed;
 
     }
 
@@ -35,7 +37,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("vertical", moveInput.y);
         animator.SetFloat("speed", (moveInput.x * moveInput.x + moveInput.y * moveInput.y));
 
-        playerRb.linearVelocity = ((Vector2.up * moveInput.y) + (Vector2.right * moveInput.x)) * speed;
+        playerRb.linearVelocity = ((Vector2.up * moveInput.y) + (Vector2.right * moveInput.x)) * moveSpeed;
 
         if (moveInput != Vector2.zero)
         {
@@ -63,8 +65,8 @@ public class PlayerController : MonoBehaviour
         if (isFainted == true) return;
         if (value == true) {
             animator.SetBool("IsDead", true);
-            speed = 0f;
-            playerRb.linearVelocity = Vector2.zero;
+            GameManager.Instance.GameOver();
+            FreezeMovement();
         }
         isFainted = value;
     }
@@ -76,6 +78,23 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy")){
             SetIsFainted(true);
         }
+    }
+
+    public void FreezeMovement()
+    {
+        // Đặt vị trí của player về vị trí gần nhất với ô lưới
+        // Để tránh việc player bị kẹt vào tường
+        transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), 0);
+        playerRb.constraints = RigidbodyConstraints2D.FreezeAll; // Ngăn không cho di chuyển
+        moveSpeed = 0f; // Đặt tốc độ về 0
+        playerRb.linearVelocity = Vector2.zero; // Đặt vận tốc về 0
+    }
+
+    public void UnfreezeMovement()
+    {
+        playerRb.constraints = RigidbodyConstraints2D.None; // Bỏ ràng buộc
+        playerRb.constraints = RigidbodyConstraints2D.FreezeRotation; // Giữ nguyên độ xoay
+        moveSpeed = speed; // Đặt tốc độ về 5
     }
 
 }

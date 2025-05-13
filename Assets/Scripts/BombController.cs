@@ -55,7 +55,7 @@ public class BombController : MonoBehaviour
 
         // Lưu lại vị trí bomb thứ n vừa mới được đặt
         bombsPos.Add(placePos);
-        Debug.Log("Before: " + bombsPos);
+        // Debug.Log("Before: " + bombsPos);
 
         // Đợi thời gian nổ của các trái bomb về sau (lấy giá trị thời gian từ chính nó thay vì từ chính controller)
         yield return new WaitForSeconds(bomb.timeDestory);
@@ -65,7 +65,7 @@ public class BombController : MonoBehaviour
         
         // Hủy vị trí sau khi nổ xong.
         bombsPos.Remove(placePos);
-        Debug.Log("After: " + bombsPos);
+        // Debug.Log("After: " + bombsPos);
 
     }
 

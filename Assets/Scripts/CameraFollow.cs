@@ -24,6 +24,10 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player == null)
+        {
+            return;
+        }
         // Calculate the desired position of the camera
         Vector3 desiredPosition = player.transform.position + offset;
 

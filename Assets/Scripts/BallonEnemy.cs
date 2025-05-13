@@ -29,7 +29,7 @@ public class BallonEnemy : Enemy
 
         if (timer <= 0f)
         {
-            Debug.Log($"Đổi hướng");
+            // Debug.Log($"Đổi hướng");
 
             timer = directionChangeInterval;
             Change();
@@ -60,22 +60,6 @@ public class BallonEnemy : Enemy
         else
         {
             moveDir = Vector2.zero; // Không có hướng nào đi được
-        }
-        
-        // Debug cho hướng di chuyển
-        switch (moveDir) {
-            case { x: 0, y: 1 }:
-                Debug.Log($"Đổi hướng: Lên");
-                break;
-            case { x: 0, y: -1 }:
-                Debug.Log($"Đổi hướng: Xuống");
-                break;
-            case { x: 1, y: 0 }: 
-                Debug.Log($"Đổi hướng: Phải");  
-                break;
-            case { x: -1, y: 0 }:
-                Debug.Log($"Đổi hướng: Trái");
-                break;
         }
     }
 }

@@ -19,8 +19,8 @@ public class Flame : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("GameOver");
-
+            Debug.Log("Kill Player");
+            
             collision.gameObject.GetComponent<PlayerController>().SetIsFainted(true);
         }
         if (collision.gameObject.CompareTag("Enemy")) {
