@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +23,11 @@ public class GameManager : MonoBehaviour
     public GameObject powerupFlamePrefab;
     public GameObject powerupBombPrefab;
     public GameObject powerupSpeedPrefab;
+    public GameObject portalPrefab;
+
+    public int levelIndex { get; private set; } = 1;
+
+    private string path { get { return Application.dataPath + "/Levels/Level" + levelIndex + ".txt"; } }
 
     private void Awake()
     {
@@ -34,24 +41,23 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void LoadLevel(string path)
+    public void LoadLevel()
     {
         Debug.Log($"Loading level from {path}");
         try
         {
             FileLevelLoader.Load(path);
 
-            // Cache tilemaps
-            // destructibleTilemap = GameObject.Find("Destruction").GetComponent<Tilemap>();
-            // indestructibleTilemap = GameObject.Find("Indestruction").GetComponent<Tilemap>();
-            // grassTilemap = GameObject.Find("Floor").GetComponent<Tilemap>();
-
             for (int row = 0; row < FileLevelLoader.Rows; row++)
             {
                 for (int col = 0; col < FileLevelLoader.Columns; col++)
                 {
                     char type = FileLevelLoader.MapLines[row][col];
+
+                    // do để offset của Grid Tilemap là 0.5 nên phải để trừ 1 (làm tròn 0.5)
                     Vector3Int tilePos = new Vector3Int(col - 1, -row - 1, 0);
+
+                    // Cái này là để cho các đối tượng spawn ra có vị trí đúng
                     Vector3 worldPos = new Vector3(col, -row, 0);
 
                     switch (type)
@@ -61,6 +67,10 @@ public class GameManager : MonoBehaviour
                             break;
                         case '#':
                             SetTile(indestructibleTilemap, wallTile, tilePos);
+                            break;
+                        case 'x':
+                            Spawn(portalPrefab, worldPos, "Portal");
+                            SetTile(destructibleTilemap, brickTile, tilePos);
                             break;
                         case 'p':
                             Spawn(playerPrefab, worldPos, "Player");
@@ -77,8 +87,8 @@ public class GameManager : MonoBehaviour
                         case 's':
                             SpawnItemWithBrick(powerupSpeedPrefab, tilePos, worldPos);
                             break;
-                    }
 
+                    }
                     SetTile(grassTilemap, grassTile, tilePos); // luôn vẽ grass dưới cùng
                 }
             }
@@ -89,7 +99,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void AssignTilemap(Tilemap destruct, Tilemap indestruct, Tilemap grass) {
+    public void AssignTilemap(Tilemap destruct, Tilemap indestruct, Tilemap grass)
+    {
         destructibleTilemap = destruct;
         indestructibleTilemap = indestruct;
         grassTilemap = grass;
@@ -97,6 +108,12 @@ public class GameManager : MonoBehaviour
 
     private void SetTile(Tilemap tilemap, Tile tile, Vector3Int pos)
     {
+
+        if (tilemap == null)
+        {
+            Debug.LogError("Tilemap is not assigned.");
+            return;
+        }
         tilemap.SetTile(pos, tile);
     }
 
@@ -111,5 +128,35 @@ public class GameManager : MonoBehaviour
     {
         SetTile(destructibleTilemap, brickTile, tilePos);
         Spawn(itemPrefab, worldPos, itemPrefab.name);
+    }
+
+    public void SetLevelIndex(int index)
+    {
+        if (index < 0)
+        {
+            Debug.LogError("Invalid level index. Must be between 1 and 3.");
+            return;
+        }
+        levelIndex = index;
+
+        Debug.Log($"Level index set to {levelIndex}");
+
+        // Check if the level index is valid
+
+        if (!File.Exists(path))
+        {
+            Debug.Log($"Level file not found: {path}");
+            SceneManager.LoadScene(0); // Load the menu scene (index 0)
+            levelIndex = 0;
+            return;
+        }
+
+        // Load the new level
+        SceneManager.LoadScene(1);
+    }
+
+    public void LoadTileMMMM() {
+       Tilemap a = GameObject.Find("Tilemap").GetComponent<Tilemap>();
+       a.SetTile(new Vector3Int(0, 0, 0), wallTile);
     }
 }

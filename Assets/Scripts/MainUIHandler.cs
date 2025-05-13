@@ -42,6 +42,6 @@ public class MainUIHandler : MonoBehaviour
             GameObject.Find("Floor").GetComponent<Tilemap>()
         );
 
-        GameManager.Instance.LoadLevel(Application.dataPath + "/Levels/Level2.txt");
+        GameManager.Instance.LoadLevel();
     }
 }
