@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     [Header("Prefabs")]
     public GameObject playerPrefab;
     public GameObject enemyBalloomPrefab;
+    public GameObject enemyOnealEnemyPrefab;
     public GameObject powerupFlamePrefab;
     public GameObject powerupBombPrefab;
     public GameObject powerupSpeedPrefab;
@@ -77,6 +78,9 @@ public class GameManager : MonoBehaviour
                             break;
                         case '1':
                             Spawn(enemyBalloomPrefab, worldPos, "EnemyBalloom");
+                            break;
+                        case '2':
+                            Spawn(enemyOnealEnemyPrefab, worldPos, "EnemyOneal");
                             break;
                         case 'b':
                             SpawnItemWithBrick(powerupBombPrefab, tilePos, worldPos);

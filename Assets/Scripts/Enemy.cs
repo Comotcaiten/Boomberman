@@ -26,7 +26,6 @@ public abstract class Enemy : MonoBehaviour
         if (isFainted) {
             return;
         }
-
         Move();
     }
 
@@ -38,7 +37,8 @@ public abstract class Enemy : MonoBehaviour
 
     IEnumerator DeathAfter() {
 
-        animator.SetBool("IsDeath", true);
+        // Chạy animation chết
+        PlayDeathAnimation();
 
         yield return new WaitForSeconds(1.0f);
 
@@ -57,5 +57,14 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public bool GetIsFainted() {return isFainted;}
+
+    protected void PlayDeathAnimation() {
+
+        if (animator == null) {
+            Debug.Log("Animator is not assigned.");
+            return;
+        }
+        animator.SetBool("IsDeath", true);
+    }
 
 }

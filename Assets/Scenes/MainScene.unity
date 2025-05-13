@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 98875066}
   - component: {fileID: 98875068}
   - component: {fileID: 98875069}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Destruction
   m_TagString: Destruction
   m_Icon: {fileID: 0}
@@ -1234,7 +1234,7 @@ GameObject:
   - component: {fileID: 1283996338}
   - component: {fileID: 1283996340}
   - component: {fileID: 1283996339}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor
   m_TagString: Floor
   m_Icon: {fileID: 0}
@@ -1631,7 +1631,7 @@ GameObject:
   - component: {fileID: 1707976396}
   - component: {fileID: 1707976398}
   - component: {fileID: 1707976399}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Indestruction
   m_TagString: Indestrution
   m_Icon: {fileID: 0}

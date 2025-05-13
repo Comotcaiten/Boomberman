@@ -1038,6 +1038,7 @@ MonoBehaviour:
   grassTile: {fileID: 11400000, guid: aa7c0095f89bc8549babe74cdcc28747, type: 2}
   playerPrefab: {fileID: 1957482915914643478, guid: e74fa26cc5629de4abb8df7e5baaf7f6, type: 3}
   enemyBalloomPrefab: {fileID: 3210251903635696120, guid: 2cfc167d454792e45b59c73af8c666a6, type: 3}
+  enemyOnealEnemyPrefab: {fileID: 3210251903635696120, guid: 48a16fc93e51050478e29da74f29530d, type: 3}
   powerupFlamePrefab: {fileID: 8856045262812515559, guid: f7a0e47ee72bc614d921278d570c2a70, type: 3}
   powerupBombPrefab: {fileID: 8373931338573904965, guid: 202df4548851ae649a99b0190498febb, type: 3}
   powerupSpeedPrefab: {fileID: 8991287641274983958, guid: 0a74419545373af458749b2cd6d68c79, type: 3}
