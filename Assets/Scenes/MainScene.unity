@@ -581,9 +581,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa1c6f382424b7f418a69bc250a524e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destructibleTilemap: {fileID: 98875067}
-  indestructibleTilemap: {fileID: 1707976397}
-  grassTilemap: {fileID: 1283996340}
 --- !u!1 &266870383
 GameObject:
   m_ObjectHideFlags: 0
@@ -1314,30 +1311,30 @@ Tilemap:
   m_TileMatrixArray:
   - m_RefCount: 0
     m_Data:
-      e00: 0
+      e00: 4.4248035e+20
       e01: 0
       e02: 1e-45
-      e03: 1.0285598e-38
-      e10: 0
+      e03: -1.0285598e-38
+      e10: 4.5908e-41
       e11: 0
       e12: 0
-      e13: 5.79e-43
-      e20: 2.8825642e-31
-      e21: 1.0285598e-38
-      e22: 1.664721e+29
-      e23: -5.563621e-19
+      e13: 6.32e-43
+      e20: 4.2909228e+20
+      e21: -1.0285598e-38
+      e22: -3.7192203e+19
+      e23: 4.9094482e-29
       e30: 4.5908e-41
-      e31: 5.79e-43
-      e32: 5.82e-43
-      e33: 5.79e-43
+      e31: 6.32e-43
+      e32: 6.35e-43
+      e33: 6.33e-43
   m_TileColorArray:
   - m_RefCount: 0
-    m_Data: {r: -5.5636e-19, g: -5.5636e-19, b: -5.5636e-19, a: -5.5636e-19}
+    m_Data: {r: 4.9094362e-29, g: 4.9094362e-29, b: 4.9094362e-29, a: 4.9094362e-29}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -8, y: -4, z: 0}
-  m_Size: {x: 16, y: 8, z: 1}
+  m_Origin: {x: -8, y: -5, z: 0}
+  m_Size: {x: 21, y: 9, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:

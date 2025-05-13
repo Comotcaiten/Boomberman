@@ -5,20 +5,9 @@ using UnityEngine.Tilemaps;
 
 public class MainUIHandler : MonoBehaviour
 {
-    public void Awake()
-    {
-        // GameManager.Instance.LoadLevel(Application.dataPath + "/Levels/Level1.txt");
-    }
-
     void Start()
     {
-        GameManager.Instance.AssignTilemap(
-            GameObject.Find("Destruction").GetComponent<Tilemap>(),
-            GameObject.Find("Indestruction").GetComponent<Tilemap>(),
-            GameObject.Find("Floor").GetComponent<Tilemap>()
-        );
-
-        GameManager.Instance.LoadLevel(Application.dataPath + "/Levels/Level2.txt");
+        LoadLevel();
     }
 
     public void OnExitButtonClicked()
@@ -38,5 +27,21 @@ public class MainUIHandler : MonoBehaviour
     public void OnRestartButtonClicked()
     {
         SceneManager.LoadScene(1); // Load the main scene (index 1)
+    }
+
+    private void LoadLevel()
+    {
+        if (GameManager.Instance == null)
+        {
+            Debug.Log("GameManager instance is null. Make sure GameManager is initialized.");
+            return;
+        }
+        GameManager.Instance.AssignTilemap(
+            GameObject.Find("Destruction").GetComponent<Tilemap>(),
+            GameObject.Find("Indestruction").GetComponent<Tilemap>(),
+            GameObject.Find("Floor").GetComponent<Tilemap>()
+        );
+
+        GameManager.Instance.LoadLevel(Application.dataPath + "/Levels/Level2.txt");
     }
 }
