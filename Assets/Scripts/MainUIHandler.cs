@@ -1,10 +1,26 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using UnityEngine.Tilemaps;
 
 public class MainUIHandler : MonoBehaviour
 {
-    
+    public void Awake()
+    {
+        // GameManager.Instance.LoadLevel(Application.dataPath + "/Levels/Level1.txt");
+    }
+
+    void Start()
+    {
+        GameManager.Instance.AssignTilemap(
+            GameObject.Find("Destruction").GetComponent<Tilemap>(),
+            GameObject.Find("Indestruction").GetComponent<Tilemap>(),
+            GameObject.Find("Floor").GetComponent<Tilemap>()
+        );
+
+        GameManager.Instance.LoadLevel(Application.dataPath + "/Levels/Level2.txt");
+    }
+
     public void OnExitButtonClicked()
     {
 #if UNITY_EDITOR
