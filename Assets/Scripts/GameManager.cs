@@ -31,16 +31,18 @@ public class GameManager : MonoBehaviour
     public int levelIndex { get; private set; } = 1;
 
     private string path { get { return Application.dataPath + "/Levels/Level" + levelIndex + ".txt"; } }
-    
+
 
     // In Level
     private List<GameObject> enemies = new List<GameObject>();
 
     private bool isGameOver = false;
-    public bool isGameWin {get; private set;} = false;
-    
+    public bool isGameWin { get; private set; } = false;
+
     private GameObject gameOverUI;
     private GameObject gameWinnerUI;
+
+    [SerializeField] private List<TextAsset> levelFiles;
 
 
     private void Awake()
@@ -58,10 +60,22 @@ public class GameManager : MonoBehaviour
     public void LoadLevel()
     {
 
-        Debug.Log($"Loading level from {path}");
         try
         {
-            FileLevelLoader.Load(path);
+            // // C1
+            // FileLevelLoader.Load(path);4
+            // Debug.Log($"Loading level from {path}");
+
+            // C2
+            if (levelIndex - 1 < 0 || levelIndex - 1 >= levelFiles.Count)
+            {
+                Debug.LogError("Invalid level index or level file not assigned.");
+                return;
+            }
+
+            TextAsset levelFile = levelFiles[levelIndex - 1];
+            FileLevelLoader.LoadFromText(levelFile.text);
+
 
             for (int row = 0; row < FileLevelLoader.Rows; row++)
             {
@@ -112,7 +126,7 @@ public class GameManager : MonoBehaviour
                     SetTile(grassTilemap, grassTile, tilePos); // luôn vẽ grass dưới cùng
                 }
             }
-            
+
         }
         catch (System.Exception e)
         {
@@ -240,7 +254,7 @@ public class GameManager : MonoBehaviour
             // GameWin();
             isGameWin = true;
         }
-        
+
     }
 
     public void ClearLevel()
@@ -263,20 +277,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PortalActive() {
+    public void PortalActive()
+    {
         UpdateEnemyCount();
 
         SetLevelIndex(levelIndex + 1);
 
         // Check if the level index is valid
 
-        if (!File.Exists(path))
+        // // C1
+        // if (!File.Exists(path))
+        // {
+        //     Debug.Log($"Level file not found: {path}");
+        //     // SceneManager.LoadScene(0); // Load the menu scene (index 0)
+        //     isGameWin = false;
+        //     GameWin();
+        //     // Reset level index to 1
+        //     levelIndex = 1;
+        //     return;
+        // }
+
+        // C2
+        if (levelIndex > levelFiles.Count)
         {
-            Debug.Log($"Level file not found: {path}");
-            // SceneManager.LoadScene(0); // Load the menu scene (index 0)
-            isGameWin = false;
+            Debug.Log("No more levels. You win the game!");
             GameWin();
-            // Reset level index to 1
             levelIndex = 1;
             return;
         }
@@ -286,5 +311,5 @@ public class GameManager : MonoBehaviour
         // Load the new level
         SceneManager.LoadScene(1);
     }
-    
+
 }

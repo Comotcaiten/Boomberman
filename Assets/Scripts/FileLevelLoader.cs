@@ -40,4 +40,44 @@ public static class FileLevelLoader
             }
         }
     }
+
+    public static void LoadFromText(string textData)
+    {
+        var lines = textData.Split(new[] { "\r\n", "\n" }, System.StringSplitOptions.None);
+
+        if (lines.Length == 0)
+        {
+            Debug.LogError("Level data is empty.");
+            return;
+        }
+
+        var meta = lines[0].Split(' ');
+
+        if (meta.Length < 3)
+        {
+            Debug.LogError("Invalid level metadata format.");
+            return;
+        }
+
+        Debug.Log($"Level Meta: {meta[0]} {meta[1]} {meta[2]}");
+
+        Rows = int.Parse(meta[1]);
+        Columns = int.Parse(meta[2]);
+
+        MapLines = new List<string>();
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            if (lines[i] == "Meta data:")
+            {
+                break;
+            }
+
+            if (!string.IsNullOrWhiteSpace(lines[i]))
+            {
+                MapLines.Add(lines[i]);
+                Debug.Log($"Level Data Line {i}: {lines[i]}");
+            }
+        }
+    }
 }
