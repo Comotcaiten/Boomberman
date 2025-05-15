@@ -7,7 +7,7 @@ public class SpeedItem : Item
     [SerializeField] private float duration = 5.0f;
     PlayerController player;
 
-    protected override IEnumerator Effect()
+    public override IEnumerator Effect()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         if (player != null)

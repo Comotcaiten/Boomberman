@@ -16,6 +16,14 @@ public class PlayerController : MonoBehaviour
 
     private bool canControl = true;
 
+    [SerializeField] private AudioClip playerAudioDeath;
+    [SerializeField] private AudioClip playerAudioGetItem;
+    [SerializeField] private AudioClip playerAudioMove;
+
+    [SerializeField] private AudioSource audioSourceEffect;
+    [SerializeField] private AudioSource audioSourceMove;
+    private bool isMoving = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,8 +40,23 @@ public class PlayerController : MonoBehaviour
     void MoveInput()
     {
         if (isFainted || !canControl) return;
+
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
+        if (moveInput != Vector2.zero)
+        {
+            if (!isMoving)
+            {
+                // audioSourceMove.PlayOneShot(playerAudioMove);
+                audioSourceMove.Play();
+                isMoving = true;
+            }
+        }
+        else
+        {
+            audioSourceMove.Stop();
+            isMoving = false;
+        }
 
         animator.SetFloat("horizontal", moveInput.x);
         animator.SetFloat("vertical", moveInput.y);
@@ -71,6 +94,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.GameOver();
             
             FreezeMovement();
+            audioSourceEffect.PlayOneShot(playerAudioDeath);
             canControl = false;
         }
         isFainted = value;
@@ -81,6 +105,15 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy")){
             SetIsFainted(true);
         }
+    }
+
+    public void TakeItem(Item item)
+    {
+        if (item == null) return;
+        item.gameObject.SetActive(false);
+        audioSourceEffect.PlayOneShot(playerAudioGetItem);
+        // Thực hiện hiệu ứng của item
+        StartCoroutine(item.Effect());
     }
 
     public void FreezeMovement()

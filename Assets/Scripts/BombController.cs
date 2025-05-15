@@ -13,8 +13,10 @@ public class BombController : MonoBehaviour
     
     private bool canControl = true;
 
-
     public List<Vector2> bombsPos;
+
+    [SerializeField] private AudioClip audioPlaceBomb;
+    [SerializeField] private AudioSource audioSourcePlaceBomb;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,6 +32,7 @@ public class BombController : MonoBehaviour
         // Chỉ cho phép đặt đúng số lượng bomb nếu số lượng bomb (bombRemaining hết thì phải đợi hồi)
         if (bombRemaining > 0 && Input.GetKeyDown(KeyCode.Space))
         {
+            audioSourcePlaceBomb.PlayOneShot(audioPlaceBomb);
             StartCoroutine(PlaceBomb());
         }
     }

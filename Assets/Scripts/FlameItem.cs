@@ -8,7 +8,7 @@ public class FlameItem : Item
 
     private BombController bomb;
 
-    protected override IEnumerator Effect()
+    public override IEnumerator Effect()
     {
         bomb = GameObject.Find("Player").GetComponent<BombController>();
 

@@ -7,7 +7,7 @@ public class BombItem : Item
     private float bombDuration = 5f; // Duration of the bomb effect
     private BombController bomb;
 
-    protected override IEnumerator Effect()
+    public override IEnumerator Effect()
     {
         bomb = GameObject.Find("Player").GetComponent<BombController>();
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
-    protected abstract IEnumerator Effect();
+    public abstract IEnumerator Effect();
 
     protected void DestroyItem() {
         Destroy(gameObject);
@@ -19,7 +19,9 @@ public abstract class Item : MonoBehaviour
                 Debug.Log("PlayerController not found");
                 return;
             }
-            player.StartCoroutine(Effect());
+            // player.StartCoro utine(Effect());
+
+            player.TakeItem(this);
             DestroyItem();
         }
     }
