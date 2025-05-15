@@ -14,7 +14,7 @@ public class SpeedItem : Item
         {
             player.speed += speed;
             yield return new WaitForSeconds(duration);
-            player.speed -= speed;
+            // player.speed -= speed;
         }
         else
         {

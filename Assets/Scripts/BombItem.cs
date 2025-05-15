@@ -15,7 +15,7 @@ public class BombItem : Item
         {
             bomb.AddBombAmount(bombAmount);
             yield return new WaitForSeconds(bombDuration);
-            bomb.RemoveBombAmount(bombAmount);
+            // bomb.RemoveBombAmount(bombAmount);
         }
         else
         {

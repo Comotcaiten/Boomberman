@@ -16,7 +16,7 @@ public class FlameItem : Item
         {
             bomb.bombRange += flameRange;
             yield return new WaitForSeconds(flameDuration);
-            bomb.bombRange -= flameRange;
+            // bomb.bombRange -= flameRange;
         }
         else
         {
