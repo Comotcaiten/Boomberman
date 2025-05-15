@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     public bool isGameWin {get; private set;} = false;
     
     private GameObject gameOverUI;
+    private GameObject gameWinnerUI;
 
 
     private void Awake()
@@ -126,9 +127,10 @@ public class GameManager : MonoBehaviour
         grassTilemap = grass;
     }
 
-    public void AssignGameOverUI(GameObject gameOver)
+    public void AssignGameUI(GameObject gameOver, GameObject gameWinner)
     {
         gameOverUI = gameOver;
+        gameWinnerUI = gameWinner;
     }
 
     private void SetTile(Tilemap tilemap, Tile tile, Vector3Int pos)
@@ -186,19 +188,6 @@ public class GameManager : MonoBehaviour
         levelIndex = index;
 
         Debug.Log($"Level index set to {levelIndex}");
-
-        // Check if the level index is valid
-
-        if (!File.Exists(path))
-        {
-            Debug.Log($"Level file not found: {path}");
-            SceneManager.LoadScene(0); // Load the menu scene (index 0)
-            levelIndex = 0;
-            return;
-        }
-
-        // Load the new level
-        SceneManager.LoadScene(1);
     }
 
     public void GameOver()
@@ -217,6 +206,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void GameWin()
+    {
+        if (isGameWin) return;
+
+        isGameWin = true;
+        Debug.Log("You Win!");
+        // Handle game win logic here (e.g., show win screen, load next level, etc.)
+        if (gameWinnerUI != null)
+        {
+            gameWinnerUI.SetActive(true);
+            gameOverUI.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("Game Winner UI is not assigned.");
+        }
+    }
+
     public void DebugEnemies()
     {
         Debug.Log($"Enemies count: {enemies.Count}");
@@ -227,11 +234,13 @@ public class GameManager : MonoBehaviour
         enemies.RemoveAll(enemy => enemy.GetComponent<Enemy>().isFainted);
         Debug.Log($"Enemies count after update: {enemies.Count}");
 
-        if (enemies.Count == 0)
+        if (enemies.Count == 0 && !isGameOver)
         {
             Debug.Log("All enemies defeated!");
+            // GameWin();
             isGameWin = true;
         }
+        
     }
 
     public void ClearLevel()
@@ -252,6 +261,30 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Game Over UI is not assigned.");
         }
+    }
+
+    public void PortalActive() {
+        UpdateEnemyCount();
+
+        SetLevelIndex(levelIndex + 1);
+
+        // Check if the level index is valid
+
+        if (!File.Exists(path))
+        {
+            Debug.Log($"Level file not found: {path}");
+            // SceneManager.LoadScene(0); // Load the menu scene (index 0)
+            isGameWin = false;
+            GameWin();
+            // Reset level index to 1
+            levelIndex = 1;
+            return;
+        }
+
+        ClearLevel();
+
+        // Load the new level
+        SceneManager.LoadScene(1);
     }
     
 }

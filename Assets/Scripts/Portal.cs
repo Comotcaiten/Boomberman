@@ -12,7 +12,8 @@ public class Portal : MonoBehaviour
             }
 
             if (GameManager.Instance.isGameWin == false) return;
-            GameManager.Instance.SetLevelIndex(GameManager.Instance.levelIndex + 1);
+            
+            GameManager.Instance.PortalActive();
         }
     }
 }

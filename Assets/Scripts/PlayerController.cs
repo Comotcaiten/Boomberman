@@ -10,9 +10,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Animator animator;
 
-    private bool isFainted = false;
+    public bool isFainted {get; private set;}= false;
 
     private Vector2 lastMovePos;
+
+    private bool canControl = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,7 +31,7 @@ public class PlayerController : MonoBehaviour
 
     void MoveInput()
     {
-        if (isFainted) return;
+        if (isFainted || !canControl) return;
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
 
@@ -65,13 +67,14 @@ public class PlayerController : MonoBehaviour
         if (isFainted == true) return;
         if (value == true) {
             animator.SetBool("IsDead", true);
+
             GameManager.Instance.GameOver();
+            
             FreezeMovement();
+            canControl = false;
         }
         isFainted = value;
     }
-
-    public bool GetIsFainted() { return isFainted; }
 
     void OnCollisionEnter2D(Collision2D collision)  
     {

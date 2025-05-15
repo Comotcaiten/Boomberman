@@ -10,6 +10,8 @@ public class BombController : MonoBehaviour
     private int bombAmount = 1;
     private float timeFuse = 2.0f;
     public int bombRange = 1;
+    
+    private bool canControl = true;
 
 
     public List<Vector2> bombsPos;
@@ -24,6 +26,7 @@ public class BombController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (canControl == false) return;
         // Chỉ cho phép đặt đúng số lượng bomb nếu số lượng bomb (bombRemaining hết thì phải đợi hồi)
         if (bombRemaining > 0 && Input.GetKeyDown(KeyCode.Space))
         {
