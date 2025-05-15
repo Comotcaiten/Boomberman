@@ -3,6 +3,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using System.IO;
 using System.Collections.Generic;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,8 +31,10 @@ public class GameManager : MonoBehaviour
     public int levelIndex { get; private set; } = 1;
 
     private string path { get { return Application.dataPath + "/Levels/Level" + levelIndex + ".txt"; } }
+    
 
-    private List<Enemy> enemies = new List<Enemy>();
+    // In Level
+    private List<GameObject> enemies = new List<GameObject>();
 
     private bool isGameOver = false;
     public bool isGameWin {get; private set;} = false;
@@ -53,6 +56,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevel()
     {
+
         Debug.Log($"Loading level from {path}");
         try
         {
@@ -90,6 +94,8 @@ public class GameManager : MonoBehaviour
                             break;
                         case '2':
                             Spawn(enemyOnealEnemyPrefab, worldPos, "EnemyOneal");
+                            // Spawn(enemyBalloomPrefab, worldPos, "EnemyBalloom");
+
                             break;
                         case 'b':
                             SpawnItemWithBrick(powerupBombPrefab, tilePos, worldPos);
@@ -144,10 +150,18 @@ public class GameManager : MonoBehaviour
 
         if (prefab.CompareTag("Enemy"))
         {
-            Enemy enemy = obj.GetComponent<Enemy>();
-            if (enemy != null)
+            if (obj != null)
             {
-                enemies.Add(enemy);
+                enemies.Add(obj);
+                CircleCollider2D enemyCollider = obj.GetComponent<CircleCollider2D>();
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    CircleCollider2D otherEnemyCollider = enemies[i].GetComponent<CircleCollider2D>();
+                    if (otherEnemyCollider != null && otherEnemyCollider != enemyCollider)
+                    {
+                        Physics2D.IgnoreCollision(enemyCollider, otherEnemyCollider);
+                    }
+                }
             }
             else
             {
@@ -195,11 +209,11 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Over!");
         // Handle game over logic here (e.g., show game over screen, reset level, etc.)
 
-        gameOverUI.SetActive(true);
+        StartCoroutine(LoadGameOverUI());
 
         for (int i = 0; i < enemies.Count; i++)
         {
-            enemies[i].FreezeMovement();
+            enemies[i].GetComponent<Enemy>().FreezeMovement();
         }
     }
 
@@ -210,7 +224,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateEnemyCount()
     {
-        enemies.RemoveAll(enemy => enemy.isFainted);
+        enemies.RemoveAll(enemy => enemy.GetComponent<Enemy>().isFainted);
         Debug.Log($"Enemies count after update: {enemies.Count}");
 
         if (enemies.Count == 0)
@@ -219,4 +233,25 @@ public class GameManager : MonoBehaviour
             isGameWin = true;
         }
     }
+
+    public void ClearLevel()
+    {
+        isGameOver = false;
+        isGameWin = false;
+        enemies.Clear();
+    }
+
+    private IEnumerator LoadGameOverUI()
+    {
+        yield return new WaitForSeconds(2f);
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("Game Over UI is not assigned.");
+        }
+    }
+    
 }

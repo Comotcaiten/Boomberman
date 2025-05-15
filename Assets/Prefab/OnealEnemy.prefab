@@ -166,8 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efe45010e6115684c86213b7e1646735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
-  animator: {fileID: 0}
+  speed: 2
+  animator: {fileID: 3447027866404588259}
 --- !u!1 &6288103072940520927
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8857184018300304688}
   - component: {fileID: 4046272886879466134}
-  - component: {fileID: 3852735065748641777}
+  - component: {fileID: 3447027866404588259}
   m_Layer: 9
   m_Name: OnealEnemySprite
   m_TagString: Untagged
@@ -256,7 +256,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &3852735065748641777
+--- !u!95 &3447027866404588259
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -266,7 +266,7 @@ Animator:
   m_GameObject: {fileID: 6288103072940520927}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8ba74705bc4d033428abc87e4bf9be35, type: 2}
+  m_Controller: {fileID: 9100000, guid: 32d1991a912f31e458d7e6041140d502, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3870700420161863587}
   - component: {fileID: 4812663580277664524}
   - component: {fileID: 1963005912924505433}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bombPrefab: {fileID: 1555995949513353589, guid: 05bccb5b4e1e4aa40af450bc54f6d079, type: 3}
   bombRemaining: 0
-  bombRange: 1
+  bombRange: 2
   bombsPos: []
 --- !u!1 &2387916163985287866
 GameObject:
@@ -154,7 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 536858095522623917}
   - component: {fileID: 6043261310432906911}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 4311227680038202536}
   - component: {fileID: 3540443979548330007}
   - component: {fileID: 835678857183918025}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerWhite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

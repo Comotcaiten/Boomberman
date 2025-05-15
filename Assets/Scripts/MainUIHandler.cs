@@ -38,6 +38,8 @@ public class MainUIHandler : MonoBehaviour
             Debug.Log("GameManager instance is null. Make sure GameManager is initialized.");
             return;
         }
+        
+        GameManager.Instance.ClearLevel();
 
         GameManager.Instance.AssignTilemap(
             GameObject.Find("Destruction").GetComponent<Tilemap>(),

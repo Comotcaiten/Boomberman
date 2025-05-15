@@ -4,13 +4,13 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Indestrution
   - Destruction
   - Floor
   - Flame
   - Bomb
   - Enemy
   - Item
+  - Indestruction
   layers:
   - Default
   - TransparentFX

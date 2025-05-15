@@ -13,19 +13,58 @@ public abstract class Enemy : MonoBehaviour
     public bool isFainted {get; private set;} = false;
 
     [SerializeField] protected Animator animator;
+
+    private Vector2 inputMove = Vector2.zero;
+
+    protected LayerMask obstacleLayer;
+    
     protected virtual void Start() {
         enenmyRb = GetComponent<Rigidbody2D>();
         collision2D = GetComponent<CircleCollider2D>();
         moveSpeed = speed;
+
+        obstacleLayer = LayerMask.GetMask("Obstacle");
     }
+    
 
     protected virtual void FixedUpdate() {
         if (isFainted) return;
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDir, 0.5f , obstacleLayer);
+        if (hit.collider != null && hit.collider != collision2D) {
+            Debug.Log($"Hit: {hit.collider.name}");
+            Debug.DrawRay(transform.position, moveDir, Color.red, 1f);
+
+            moveDir = Vector2.zero;
+        }
+        MoveAnimator();
         Move();
     }
 
-    protected virtual void Move() {
+    protected virtual void Move() 
+    {
         enenmyRb.linearVelocity = moveDir * moveSpeed;
+    }
+
+    protected virtual void MoveAnimator()
+    {
+        if (animator == null) {
+            Debug.Log("Animator is not assigned.");
+            return;
+        }
+        
+        if (inputMove.x != moveDir.x || inputMove.y != moveDir.y) {
+            inputMove = new Vector2(moveDir.x, moveDir.y);
+            if (inputMove.x != 0) {inputMove.x = (Mathf.Abs(inputMove.x) / inputMove.x);}
+            if (inputMove.y != 0) {inputMove.y = (Mathf.Abs(inputMove.y) / inputMove.y);}
+        }
+        
+        animator.SetFloat("horizontal", moveDir.x);
+        animator.SetFloat("vertical", moveDir.y);
+        animator.SetFloat("speed", (moveDir.x * moveDir.x + moveDir.y * moveDir.y));
+
+        animator.SetFloat("lastHorizontal", inputMove.x);
+        animator.SetFloat("lastVertical", inputMove.y);
     }
 
     protected abstract void Change();
@@ -64,6 +103,7 @@ public abstract class Enemy : MonoBehaviour
             Debug.Log("Animator is not assigned.");
             return;
         }
+
         animator.SetBool("IsDeath", true);
     }
 

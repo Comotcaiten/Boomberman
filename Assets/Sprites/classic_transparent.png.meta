@@ -2966,6 +2966,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: classic_transparent_126
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 192
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0bdf609a7f628243a3ef225fb05d949
+      internalID: 677185969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -3011,6 +3033,7 @@ TextureImporter:
       classic_transparent_123: 739937180
       classic_transparent_124: 2000210694
       classic_transparent_125: 171691973
+      classic_transparent_126: 677185969
       classic_transparent_13: -1568339128
       classic_transparent_14: 171517497
       classic_transparent_15: -93906952

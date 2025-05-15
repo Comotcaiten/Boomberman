@@ -44,7 +44,7 @@ public class BallonEnemy : Enemy
         List<Vector2> validDirs = new List<Vector2>();
         foreach (var dir in moveDirs)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, 1f, LayerMask.GetMask("Obstacle"));
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, 0.5f, obstacleLayer);
 
             if (hit.collider == null)
             {
