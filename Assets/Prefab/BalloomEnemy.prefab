@@ -16,7 +16,7 @@ GameObject:
   m_Layer: 9
   m_Name: BalloomEnemy
   m_TagString: Enemy
-  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d57bbc003680fc49b1f4502eac539d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  speed: 2
   animator: {fileID: 3852735065748641777}
 --- !u!1 &6288103072940520927
 GameObject:

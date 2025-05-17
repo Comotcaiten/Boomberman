@@ -196,7 +196,7 @@ public class GameManager : MonoBehaviour
     {
         if (index < 0)
         {
-            Debug.LogError("Invalid level index. Must be between 1 and 3.");
+            Debug.LogError("Invalid level index");
             return;
         }
         levelIndex = index;
@@ -284,18 +284,6 @@ public class GameManager : MonoBehaviour
         SetLevelIndex(levelIndex + 1);
 
         // Check if the level index is valid
-
-        // // C1
-        // if (!File.Exists(path))
-        // {
-        //     Debug.Log($"Level file not found: {path}");
-        //     // SceneManager.LoadScene(0); // Load the menu scene (index 0)
-        //     isGameWin = false;
-        //     GameWin();
-        //     // Reset level index to 1
-        //     levelIndex = 1;
-        //     return;
-        // }
 
         // C2
         if (levelIndex > levelFiles.Count)

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallonEnemy : Enemy
+public class BallomEnemy : Enemy
 {
     private float directionChangeInterval = 5.0f;
     private float timer;

@@ -9,6 +9,8 @@ public class Portal : MonoBehaviour
             if (GameManager.Instance == null)
             {
                 Debug.Log("GameManager instance is null. Make sure GameManager is initialized.");
+
+                return;
             }
 
             if (GameManager.Instance.isGameWin == false) return;

@@ -56,27 +56,6 @@ public class OnealEnemy : Enemy
 
     protected override void Change()
     {
-        // List<Vector2> validDirs = new List<Vector2>();
-        // foreach (var dir in moveDirs)
-        // {
-        //     RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, 1f, LayerMask.GetMask("Obstacle"));
-
-        //     if (hit.collider == null)
-        //     {
-        //         validDirs.Add(dir);
-        //     }
-            
-        // }
-
-        // if (validDirs.Count > 0)
-        // {
-        //     moveDir = validDirs[Random.Range(0, validDirs.Count)];
-        // }
-        // else
-        // {
-        //     moveDir = Vector2.zero; // Không có hướng nào đi được
-        // }
-
         moveSpeed = speeds[Random.Range(0, speeds.Length)];
         if (!isChasing)
         {
