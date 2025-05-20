@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Animator animator;
 
-    public bool isFainted {get; private set;}= false;
+    public bool isFainted { get; private set; } = false;
 
     private Vector2 lastMovePos;
 
@@ -41,8 +41,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isFainted || !canControl) return;
 
-        moveInput.x = Input.GetAxis("Horizontal");
-        moveInput.y = Input.GetAxis("Vertical");
+        // moveInput.x = Input.GetAxis("Horizontal");
+        // moveInput.y = Input.GetAxis("Vertical");
         // if (moveInput != Vector2.zero)
         // {
         //     if (!isMoving)
@@ -69,14 +69,14 @@ public class PlayerController : MonoBehaviour
             if (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y))
             {
                 // Ưu tiên hướng ngang
-                lastMovePos.x = moveInput.x/Mathf.Abs(moveInput.x);
+                lastMovePos.x = moveInput.x / Mathf.Abs(moveInput.x);
                 lastMovePos.y = 0;
             }
             else
             {
                 // hướng dọc
                 lastMovePos.x = 0;
-                lastMovePos.y = moveInput.y/Mathf.Abs(moveInput.y);
+                lastMovePos.y = moveInput.y / Mathf.Abs(moveInput.y);
             }
 
             animator.SetFloat("LastPosX", lastMovePos.x);
@@ -88,11 +88,12 @@ public class PlayerController : MonoBehaviour
     public void SetIsFainted(bool value)
     {
         if (isFainted == true) return;
-        if (value == true) {
+        if (value == true)
+        {
             animator.SetBool("IsDead", true);
 
             GameManager.Instance.GameOver();
-            
+
             FreezeMovement();
             audioSourceEffect.PlayOneShot(playerAudioDeath);
             canControl = false;
@@ -100,9 +101,10 @@ public class PlayerController : MonoBehaviour
         isFainted = value;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)  
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy")){
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
             SetIsFainted(true);
         }
     }
@@ -131,6 +133,11 @@ public class PlayerController : MonoBehaviour
         playerRb.constraints = RigidbodyConstraints2D.None; // Bỏ ràng buộc
         playerRb.constraints = RigidbodyConstraints2D.FreezeRotation; // Giữ nguyên độ xoay
         moveSpeed = speed; // Đặt tốc độ về 5
+    }
+
+    public void SetMoveInput(Vector2 input)
+    {
+        moveInput = input;
     }
 
 }

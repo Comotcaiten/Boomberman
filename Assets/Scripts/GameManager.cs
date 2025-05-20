@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private List<TextAsset> levelFiles;
 
+    private GameObject player;
+
 
     private void Awake()
     {
@@ -102,7 +104,8 @@ public class GameManager : MonoBehaviour
                             SetTile(destructibleTilemap, brickTile, tilePos);
                             break;
                         case 'p':
-                            Spawn(playerPrefab, worldPos, "Player");
+                            // Spawn(playerPrefab, worldPos, "Player");
+                            SetUpPlayer(playerPrefab, worldPos);
                             break;
                         case '1':
                             Spawn(enemyBalloomPrefab, worldPos, "EnemyBalloom");
@@ -147,6 +150,11 @@ public class GameManager : MonoBehaviour
         gameWinnerUI = gameWinner;
     }
 
+    public void AssignPlayer(GameObject playerObj)
+    {
+        player = playerObj;
+    }
+
     private void SetTile(Tilemap tilemap, Tile tile, Vector3Int pos)
     {
 
@@ -183,6 +191,22 @@ public class GameManager : MonoBehaviour
             {
                 Debug.LogError($"Prefab {name} does not have an Enemy component.");
             }
+        }
+    }
+
+    private void SetUpPlayer(GameObject playerPrefab, Vector3 pos)
+    {
+        if (player == null)
+        {
+            player = Instantiate(playerPrefab, pos, Quaternion.identity);
+            player.name = "Player";
+            Debug.Log("Player spawned");
+        }
+        else
+        {
+            player.SetActive(true);
+            player.transform.position = pos;
+            Debug.Log("Player already exists in the scene.");
         }
     }
 

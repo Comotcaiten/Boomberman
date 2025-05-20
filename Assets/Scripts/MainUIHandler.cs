@@ -3,13 +3,19 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEngine.Tilemaps;
 using System.Collections;
+using UnityEngine.UI;
 
 public class MainUIHandler : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private GameObject gameWinnerUI;
     [SerializeField] private GameObject levelLoadUI;
+    [SerializeField] private GameObject UIMoblie;
+    [SerializeField] private Button buttonPlaceBomb;
+    [SerializeField] private JoystickController joystickController;
     [SerializeField] private GameObject mainCamera;
+
+    [SerializeField] private GameObject player;
     void Start()
     {
         StartCoroutine(LoadLevelLoadingUI());
@@ -60,6 +66,15 @@ public class MainUIHandler : MonoBehaviour
         GameManager.Instance.AssignGameUI(gameOverUI, gameWinnerUI);
         gameOverUI.SetActive(false);
         gameWinnerUI.SetActive(false);
+
+        GameManager.Instance.AssignPlayer(player);
+
+        buttonPlaceBomb.onClick.AddListener(() =>
+        {
+            player.GetComponent<BombController>().ButtonPlaceBomb();
+        });
+
+        joystickController.player = player.GetComponent<PlayerController>();
 
         // mainCamera.AddComponent<CameraFollow>().player = GameObject.FindGameObjectWithTag("Player");
         // mainCamera.GetComponent<CameraFollow>().offset = new Vector3(0, 0, -10);

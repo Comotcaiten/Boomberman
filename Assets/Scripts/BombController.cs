@@ -37,6 +37,17 @@ public class BombController : MonoBehaviour
         }
     }
 
+    public void ButtonPlaceBomb()
+    {
+        if (canControl == false) return;
+        // Chỉ cho phép đặt đúng số lượng bomb nếu số lượng bomb (bombRemaining hết thì phải đợi hồi)
+        if (bombRemaining > 0)
+        {
+            audioSourcePlaceBomb.PlayOneShot(audioPlaceBomb);
+            StartCoroutine(PlaceBomb());
+        }
+    }
+
     IEnumerator PlaceBomb() 
     {
         Vector2 placePos = transform.position;
