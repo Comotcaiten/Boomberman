@@ -18,11 +18,21 @@ public class MainUIHandler : MonoBehaviour
     [SerializeField] private GameObject player;
     void Start()
     {
-#if UNITY_ANDROID || UNITY_IOS
-    // UIMoblie.SetActive(true);
-#else
-    UIMoblie.SetActive(false);
-#endif
+        // #if UNITY_ANDROID || UNITY_IOS
+        //         UIMoblie.SetActive(true);
+        //         Debug.Log("Mobile UI is active");
+        // #else
+        //     UIMoblie.SetActive(false);
+        //     Debug.Log("Mobile UI is inactive");
+        // #endif
+        if (IsMobilePlatform())
+        {
+            UIMoblie.SetActive(true);
+        }
+        else
+        {
+            UIMoblie.SetActive(false);
+        }
 
         StartCoroutine(LoadLevelLoadingUI());
         LoadLevel();
@@ -60,7 +70,7 @@ public class MainUIHandler : MonoBehaviour
             Debug.Log("GameManager instance is null. Make sure GameManager is initialized.");
             return;
         }
-        
+
         GameManager.Instance.ClearLevel();
 
         GameManager.Instance.AssignTilemap(
@@ -82,13 +92,16 @@ public class MainUIHandler : MonoBehaviour
 
         joystickController.player = player.GetComponent<PlayerController>();
 
-        mainCamera.AddComponent<CameraFollow>().player = GameObject.FindGameObjectWithTag("Player");
-        mainCamera.GetComponent<CameraFollow>().offset = new Vector3(0, 0, -10);
-        mainCamera.GetComponent<CameraFollow>().smoothSpeed = 0.125f;
-        mainCamera.GetComponent<CameraFollow>().enabled = true;
+        if (IsMobilePlatform())
+        {
+            mainCamera.AddComponent<CameraFollow>().player = GameObject.FindGameObjectWithTag("Player");
+            mainCamera.GetComponent<CameraFollow>().offset = new Vector3(0, 0, -20);
+            mainCamera.GetComponent<CameraFollow>().smoothSpeed = 0.125f;
+            mainCamera.GetComponent<CameraFollow>().enabled = true;
+        }
 
         GameManager.Instance.LoadLevel();
-    
+
     }
 
     IEnumerator LoadLevelLoadingUI()
@@ -96,5 +109,11 @@ public class MainUIHandler : MonoBehaviour
         levelLoadUI.SetActive(true);
         yield return new WaitForSeconds(2.0f);
         levelLoadUI.SetActive(false);
+    }
+
+    bool IsMobilePlatform()
+    {
+        return Application.platform == RuntimePlatform.Android
+            || Application.platform == RuntimePlatform.IPhonePlayer;
     }
 }
