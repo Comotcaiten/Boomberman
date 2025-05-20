@@ -30,7 +30,7 @@ public class BombController : MonoBehaviour
     {
         if (canControl == false) return;
         // Chỉ cho phép đặt đúng số lượng bomb nếu số lượng bomb (bombRemaining hết thì phải đợi hồi)
-        if (bombRemaining > 0 && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
+        if (bombRemaining > 0 && (Input.GetKeyDown(KeyCode.Space)))
         {
             audioSourcePlaceBomb.PlayOneShot(audioPlaceBomb);
             StartCoroutine(PlaceBomb());
