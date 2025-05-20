@@ -62,7 +62,11 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("vertical", moveInput.y);
         animator.SetFloat("speed", (moveInput.x * moveInput.x + moveInput.y * moveInput.y));
 
-        playerRb.linearVelocity = ((Vector2.up * moveInput.y) + (Vector2.right * moveInput.x)) * moveSpeed;
+        // moveInput.Normalize(); // Đưa về vector đơn vị
+        // playerRb.linearVelocity = ((Vector2.up * moveInput.y) + (Vector2.right * moveInput.x)) * moveSpeed;
+
+        // Vector2 move = moveInput * moveSpeed * Time.deltaTime;
+        // transform.Translate(move);
 
         if (moveInput != Vector2.zero)
         {

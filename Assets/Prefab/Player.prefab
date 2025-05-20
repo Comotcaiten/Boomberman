@@ -57,7 +57,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 6200000, guid: 14160d8a4ca9cff44b1306db23c6bbba, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593ab5c188001be44a7b7e6d737519bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 3.5
   animator: {fileID: 835678857183918025}
   playerAudioDeath: {fileID: 8300000, guid: 6645d5f1edd45dc42a2baf2283557009, type: 3}
   playerAudioGetItem: {fileID: 8300000, guid: 4997d53bf6337c84fb4908cb606fdc64, type: 3}
@@ -398,8 +398,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.025, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 363026657657587660}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
