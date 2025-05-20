@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bombPrefab: {fileID: 1555995949513353589, guid: 05bccb5b4e1e4aa40af450bc54f6d079, type: 3}
-  bombAmount: 2
+  bombAmount: 1
   bombRange: 1
   bombsPos: []
   audioPlaceBomb: {fileID: 8300000, guid: 8641f414601f30e4eabc9aee837fdc75, type: 3}
