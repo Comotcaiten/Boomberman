@@ -18,6 +18,12 @@ public class MainUIHandler : MonoBehaviour
     [SerializeField] private GameObject player;
     void Start()
     {
+#if UNITY_ANDROID || UNITY_IOS
+    // UIMoblie.SetActive(true);
+#else
+    UIMoblie.SetActive(false);
+#endif
+
         StartCoroutine(LoadLevelLoadingUI());
         LoadLevel();
     }
@@ -76,10 +82,10 @@ public class MainUIHandler : MonoBehaviour
 
         joystickController.player = player.GetComponent<PlayerController>();
 
-        // mainCamera.AddComponent<CameraFollow>().player = GameObject.FindGameObjectWithTag("Player");
-        // mainCamera.GetComponent<CameraFollow>().offset = new Vector3(0, 0, -10);
-        // mainCamera.GetComponent<CameraFollow>().smoothSpeed = 0.125f;
-        // mainCamera.GetComponent<CameraFollow>().enabled = true;
+        mainCamera.AddComponent<CameraFollow>().player = GameObject.FindGameObjectWithTag("Player");
+        mainCamera.GetComponent<CameraFollow>().offset = new Vector3(0, 0, -10);
+        mainCamera.GetComponent<CameraFollow>().smoothSpeed = 0.125f;
+        mainCamera.GetComponent<CameraFollow>().enabled = true;
 
         GameManager.Instance.LoadLevel();
     
