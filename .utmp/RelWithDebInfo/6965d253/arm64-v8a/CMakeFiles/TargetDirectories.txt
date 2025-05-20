@@ -1,0 +1,8 @@
+C:/Users/phap2/OneDrive/Documents/GitHub/Boomberman/.utmp/RelWithDebInfo/6965d253/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/phap2/OneDrive/Documents/GitHub/Boomberman/.utmp/RelWithDebInfo/6965d253/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/phap2/OneDrive/Documents/GitHub/Boomberman/.utmp/RelWithDebInfo/6965d253/arm64-v8a/GameActivity/CMakeFiles/game.dir
+C:/Users/phap2/OneDrive/Documents/GitHub/Boomberman/.utmp/RelWithDebInfo/6965d253/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+C:/Users/phap2/OneDrive/Documents/GitHub/Boomberman/.utmp/RelWithDebInfo/6965d253/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
+C:/Users/phap2/OneDrive/Documents/GitHub/Boomberman/.utmp/RelWithDebInfo/6965d253/arm64-v8a/FramePacing/CMakeFiles/swappywrapper.dir
+C:/Users/phap2/OneDrive/Documents/GitHub/Boomberman/.utmp/RelWithDebInfo/6965d253/arm64-v8a/FramePacing/CMakeFiles/edit_cache.dir
+C:/Users/phap2/OneDrive/Documents/GitHub/Boomberman/.utmp/RelWithDebInfo/6965d253/arm64-v8a/FramePacing/CMakeFiles/rebuild_cache.dir
