@@ -54,6 +54,7 @@ public class MainUIHandler : MonoBehaviour
 
     public void OnRestartButtonClicked()
     {
+        GameManager.Instance.ClearLevel();
         SceneManager.LoadScene(1); // Load the main scene (index 1)
     }
 

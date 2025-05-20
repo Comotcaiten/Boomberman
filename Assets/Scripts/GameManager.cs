@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using System.IO;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
@@ -286,6 +287,8 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         isGameWin = false;
         enemies.Clear();
+
+        levelIndex = 1;
     }
 
     private IEnumerator LoadGameOverUI()
