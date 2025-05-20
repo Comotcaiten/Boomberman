@@ -43,20 +43,20 @@ public class PlayerController : MonoBehaviour
 
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
-        if (moveInput != Vector2.zero)
-        {
-            if (!isMoving)
-            {
-                // audioSourceMove.PlayOneShot(playerAudioMove);
-                audioSourceMove.Play();
-                isMoving = true;
-            }
-        }
-        else
-        {
-            audioSourceMove.Stop();
-            isMoving = false;
-        }
+        // if (moveInput != Vector2.zero)
+        // {
+        //     if (!isMoving)
+        //     {
+        //         // audioSourceMove.PlayOneShot(playerAudioMove);
+        //         audioSourceMove.Play();
+        //         isMoving = true;
+        //     }
+        // }
+        // else
+        // {
+        //     audioSourceMove.Stop();
+        //     isMoving = false;
+        // }
 
         animator.SetFloat("horizontal", moveInput.x);
         animator.SetFloat("vertical", moveInput.y);

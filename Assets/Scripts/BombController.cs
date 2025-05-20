@@ -6,8 +6,8 @@ using UnityEngine;
 public class BombController : MonoBehaviour
 {
     public GameObject bombPrefab;
-    public int bombRemaining;
-    private int bombAmount = 1;
+    private int bombRemaining;
+    [SerializeField] private int bombAmount = 1;
     private float timeFuse = 2.0f;
     public int bombRange = 1;
     

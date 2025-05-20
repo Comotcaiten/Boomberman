@@ -17,16 +17,23 @@ public class Flame : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Kill Player");
-            
+
             collision.gameObject.GetComponent<PlayerController>().SetIsFainted(true);
         }
-        if (collision.gameObject.CompareTag("Enemy")) {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
             Debug.Log("Kill Enemy");
 
             collision.gameObject.GetComponent<Enemy>().SetIsFainted(true);
+        }
+
+        if (collision.gameObject.CompareTag("Bomb"))
+        {
+            Debug.Log("Hit Bomb");
+            collision.gameObject.GetComponent<Bomb>().timeDestory = 0f;
         }
     }
 }
