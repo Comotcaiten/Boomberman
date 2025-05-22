@@ -5,6 +5,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.SocialPlatforms.Impl;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -46,10 +47,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<TextAsset> levelFiles;
 
     private GameObject player;
+    private GameObject scoreText;
 
+    public int totalscore = 0;
 
     private void Awake()
     {
+
         if (Instance != null)
         {
             Destroy(gameObject);
@@ -58,6 +62,7 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
     }
 
     public void LoadLevel()
@@ -130,7 +135,6 @@ public class GameManager : MonoBehaviour
                     SetTile(grassTilemap, grassTile, tilePos); // luôn vẽ grass dưới cùng
                 }
             }
-
         }
         catch (System.Exception e)
         {
@@ -243,6 +247,9 @@ public class GameManager : MonoBehaviour
         {
             enemies[i].GetComponent<Enemy>().FreezeMovement();
         }
+
+        totalscore = 0;
+        levelIndex = 1;
     }
 
     public void GameWin()
@@ -273,6 +280,7 @@ public class GameManager : MonoBehaviour
         enemies.RemoveAll(enemy => enemy.GetComponent<Enemy>().isFainted);
         Debug.Log($"Enemies count after update: {enemies.Count}");
 
+
         if (enemies.Count == 0 && !isGameOver)
         {
             Debug.Log("All enemies defeated!");
@@ -288,7 +296,6 @@ public class GameManager : MonoBehaviour
         isGameWin = false;
         enemies.Clear();
 
-        levelIndex = 1;
     }
 
     private IEnumerator LoadGameOverUI()
@@ -310,6 +317,9 @@ public class GameManager : MonoBehaviour
 
         SetLevelIndex(levelIndex + 1);
 
+
+
+
         // Check if the level index is valid
 
         // C2
@@ -326,5 +336,4 @@ public class GameManager : MonoBehaviour
         // Load the new level
         SceneManager.LoadScene(1);
     }
-
 }

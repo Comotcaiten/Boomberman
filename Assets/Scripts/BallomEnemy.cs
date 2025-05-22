@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BallomEnemy : Enemy
 {
-    private float directionChangeInterval = 5.0f;
+    private float directionChangeInterval = 1.0f;
     private float timer;
 
     private Vector2[] moveDirs = {
