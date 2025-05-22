@@ -12,7 +12,7 @@ public class MainUIHandler : MonoBehaviour
     [SerializeField] private GameObject levelLoadUI;
     [SerializeField] private GameObject UIMoblie;
     [SerializeField] private Button buttonPlaceBomb;
-    [SerializeField] private JoystickController joystickController;
+    [SerializeField] private DpadController dpadController;
     [SerializeField] private GameObject mainCamera;
 
     [SerializeField] private GameObject player;
@@ -93,7 +93,7 @@ public class MainUIHandler : MonoBehaviour
             player.GetComponent<BombController>().ButtonPlaceBomb();
         });
 
-        joystickController.player = player.GetComponent<PlayerController>();
+        dpadController.player = player.GetComponent<PlayerController>();
 
         // if (IsMobilePlatform())
         // {
