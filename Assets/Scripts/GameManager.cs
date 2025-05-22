@@ -114,7 +114,6 @@ public class GameManager : MonoBehaviour
                         case '2':
                             Spawn(enemyOnealEnemyPrefab, worldPos, "EnemyOneal");
                             // Spawn(enemyBalloomPrefab, worldPos, "EnemyBalloom");
-
                             break;
                         case 'b':
                             SpawnItemWithBrick(powerupBombPrefab, tilePos, worldPos);

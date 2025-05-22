@@ -56,6 +56,11 @@ public class MainUIHandler : MonoBehaviour
 
     public void OnRestartButtonClicked()
     {
+        if (isGameManagerNull())
+        {
+            SceneManager.LoadScene(0); // Load the menu scene (index 0)
+            return;
+        }
         GameManager.Instance.ClearLevel();
         SceneManager.LoadScene(1); // Load the main scene (index 1)
     }
@@ -67,12 +72,7 @@ public class MainUIHandler : MonoBehaviour
 
     private void LoadLevel()
     {
-        if (GameManager.Instance == null)
-        {
-            gameOverUI.SetActive(true);
-            Debug.Log("GameManager instance is null. Make sure GameManager is initialized.");
-            return;
-        }
+        if (isGameManagerNull()) return;
 
         GameManager.Instance.ClearLevel();
 
@@ -101,16 +101,6 @@ public class MainUIHandler : MonoBehaviour
         //     camFollow.player = GameObject.FindGameObjectWithTag("Player");
         //     camFollow.offset = new Vector3(0, 0, -20);
         //     camFollow.smoothSpeed = 0.125f;
-
-        //     // Tính giới hạn camera
-        //     float camHalfWidth = Camera.main.orthographicSize * Camera.main.aspect;
-        //     float camHalfHeight = Camera.main.orthographicSize;
-
-        //     float mapWidth = 13f;
-        //     float mapHeight = 11f;
-
-        //     camFollow.minPos = new Vector2(camHalfWidth, camHalfHeight);
-        //     camFollow.maxPos = new Vector2(mapWidth - camHalfWidth, mapHeight - camHalfHeight);
         // }
         camFollow = mainCamera.AddComponent<CameraFollow>();
         camFollow.player = GameObject.FindGameObjectWithTag("Player");
@@ -132,5 +122,16 @@ public class MainUIHandler : MonoBehaviour
     {
         return Application.platform == RuntimePlatform.Android
             || Application.platform == RuntimePlatform.IPhonePlayer;
+    }
+
+    bool isGameManagerNull()
+    {
+        if (GameManager.Instance == null)
+        {
+            gameOverUI.SetActive(true);
+            Debug.Log("GameManager instance is null. Make sure GameManager is initialized.");
+            return true;
+        }
+        return false;
     }
 }

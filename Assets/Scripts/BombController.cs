@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BombController : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class BombController : MonoBehaviour
     [SerializeField] private int bombAmount = 1;
     private float timeFuse = 2.0f;
     public int bombRange = 1;
-    
+
     private bool canControl = true;
 
     public List<Vector2> bombsPos;
@@ -22,7 +23,7 @@ public class BombController : MonoBehaviour
     void Start()
     {
         bombRemaining = bombAmount;
-        
+
     }
 
     // Update is called once per frame
@@ -35,6 +36,17 @@ public class BombController : MonoBehaviour
             audioSourcePlaceBomb.PlayOneShot(audioPlaceBomb);
             StartCoroutine(PlaceBomb());
         }
+
+        // if (bombRemaining > 0)
+        // {
+        //     // Check: bấm phím hoặc chạm màn hình
+        //     if (Input.GetKeyDown(KeyCode.Space) || 
+        //         (Input.GetMouseButtonDown(0) && !IsPointerOverUI()))
+        //     {
+        //         audioSourcePlaceBomb.PlayOneShot(audioPlaceBomb);
+        //         StartCoroutine(PlaceBomb());
+        //     }
+        // }
     }
 
     public void ButtonPlaceBomb()
@@ -48,15 +60,16 @@ public class BombController : MonoBehaviour
         }
     }
 
-    IEnumerator PlaceBomb() 
+    IEnumerator PlaceBomb()
     {
         Vector2 placePos = transform.position;
         placePos.x = MathF.Round(placePos.x);
         placePos.y = MathF.Round(placePos.y);
 
         // Kiểm tra xem ở vị trí hiện tại có một trái bomb chưa
-        if (bombsPos.Contains(placePos)) {
-             yield break;
+        if (bombsPos.Contains(placePos))
+        {
+            yield break;
         }
 
         // Lấy 1 trái bomb ra
@@ -68,7 +81,7 @@ public class BombController : MonoBehaviour
         GameObject bombObj = Instantiate(bombPrefab, placePos, bombPrefab.transform.rotation);
         Bomb bomb = bombObj.GetComponent<Bomb>();
         bomb.timeDestory = timeFuse;
-        bomb.rangeDestruct = Mathf.Max(bombRange, bomb.rangeDestruct);  
+        bomb.rangeDestruct = Mathf.Max(bombRange, bomb.rangeDestruct);
 
         // Lưu lại vị trí bomb thứ n vừa mới được đặt
         bombsPos.Add(placePos);
@@ -79,7 +92,7 @@ public class BombController : MonoBehaviour
 
         // Hồi lại một trái sau khi trái lấy ra đã nổ
         bombRemaining++;
-        
+
         // Hủy vị trí sau khi nổ xong.
         bombsPos.Remove(placePos);
         // Debug.Log("After: " + bombsPos);
@@ -97,4 +110,10 @@ public class BombController : MonoBehaviour
         bombAmount -= amount;
         bombRemaining -= amount;
     }
+    
+bool IsPointerOverUI()
+{
+    // Nếu đang ở mobile, kiểm tra có chạm vào UI không
+    return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+}
 }
