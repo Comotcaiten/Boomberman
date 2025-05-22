@@ -16,6 +16,8 @@ public class MainUIHandler : MonoBehaviour
     [SerializeField] private GameObject mainCamera;
 
     [SerializeField] private GameObject player;
+
+    private CameraFollow camFollow;
     void Start()
     {
         // #if UNITY_ANDROID || UNITY_IOS
@@ -93,13 +95,27 @@ public class MainUIHandler : MonoBehaviour
 
         joystickController.player = player.GetComponent<PlayerController>();
 
-        if (IsMobilePlatform())
-        {
-            mainCamera.AddComponent<CameraFollow>().player = GameObject.FindGameObjectWithTag("Player");
-            mainCamera.GetComponent<CameraFollow>().offset = new Vector3(0, 0, -20);
-            mainCamera.GetComponent<CameraFollow>().smoothSpeed = 0.125f;
-            mainCamera.GetComponent<CameraFollow>().enabled = true;
-        }
+        // if (IsMobilePlatform())
+        // {
+        //     camFollow = mainCamera.AddComponent<CameraFollow>();
+        //     camFollow.player = GameObject.FindGameObjectWithTag("Player");
+        //     camFollow.offset = new Vector3(0, 0, -20);
+        //     camFollow.smoothSpeed = 0.125f;
+
+        //     // Tính giới hạn camera
+        //     float camHalfWidth = Camera.main.orthographicSize * Camera.main.aspect;
+        //     float camHalfHeight = Camera.main.orthographicSize;
+
+        //     float mapWidth = 13f;
+        //     float mapHeight = 11f;
+
+        //     camFollow.minPos = new Vector2(camHalfWidth, camHalfHeight);
+        //     camFollow.maxPos = new Vector2(mapWidth - camHalfWidth, mapHeight - camHalfHeight);
+        // }
+        camFollow = mainCamera.AddComponent<CameraFollow>();
+        camFollow.player = GameObject.FindGameObjectWithTag("Player");
+        camFollow.offset = new Vector3(0, -6, -10);
+        camFollow.smoothSpeed = 0.125f;
 
         GameManager.Instance.LoadLevel();
 
