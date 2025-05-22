@@ -28,7 +28,12 @@ public class JoystickController : MonoBehaviour
             }
             else
             {
-                input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                if (useJoystickOnly)
+                    input = new Vector2(joystick.Horizontal, joystick.Vertical);
+                else
+                {
+                    input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                }
             }
 
 
