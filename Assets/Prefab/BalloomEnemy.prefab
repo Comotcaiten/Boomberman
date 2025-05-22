@@ -168,6 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   animator: {fileID: 3852735065748641777}
+  score: 100
 --- !u!1 &6288103072940520927
 GameObject:
   m_ObjectHideFlags: 0
