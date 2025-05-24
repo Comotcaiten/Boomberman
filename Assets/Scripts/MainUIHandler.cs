@@ -110,6 +110,7 @@ public class MainUIHandler : MonoBehaviour
         //     camFollow.offset = new Vector3(0, 0, -20);
         //     camFollow.smoothSpeed = 0.125f;
         // }
+
         camFollow = mainCamera.AddComponent<CameraFollow>();
         camFollow.player = GameObject.FindGameObjectWithTag("Player");
         camFollow.offset = new Vector3(0, -6, -10);
