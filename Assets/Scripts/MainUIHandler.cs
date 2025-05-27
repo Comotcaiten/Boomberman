@@ -101,6 +101,7 @@ public class MainUIHandler : MonoBehaviour
         camFollow.offset = new Vector3(0, -6, -10);
         camFollow.smoothSpeed = 0.125f;
 
+
         GameManager.Instance.LoadLevel();
 
     }
@@ -122,4 +123,5 @@ public class MainUIHandler : MonoBehaviour
         }
         return false;
     }
+
 }

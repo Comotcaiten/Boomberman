@@ -1,4 +1,4 @@
-    using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
@@ -38,8 +38,8 @@ public abstract class Enemy : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDir, 0.5f, obstacleLayer);
         if (hit.collider != null && hit.collider != collision2D)
         {
-            Debug.Log($"Hit: {hit.collider.name}");
-            Debug.DrawRay(transform.position, moveDir, Color.red, 1f);
+            // Debug.Log($"Hit: {hit.collider.name}");
+            // Debug.DrawRay(transform.position, moveDir, Color.red, 1f);
 
             moveDir = Vector2.zero;
         }
