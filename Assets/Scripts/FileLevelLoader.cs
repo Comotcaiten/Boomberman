@@ -76,7 +76,7 @@ public static class FileLevelLoader
             if (!string.IsNullOrWhiteSpace(lines[i]))
             {
                 MapLines.Add(lines[i]);
-                Debug.Log($"Level Data Line {i}: {lines[i]}");
+                // Debug.Log($"Level Data Line {i}: {lines[i]}");
             }
         }
     }

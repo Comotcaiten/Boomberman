@@ -1,11 +1,8 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
-using System.IO;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.SocialPlatforms.Impl;
-using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -51,6 +48,9 @@ public class GameManager : MonoBehaviour
 
     public int totalscore = 0;
 
+    public InputSettings inputSettings;
+
+
     private void Awake()
     {
 
@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+        Instance.inputSettings = new InputSettings();
         DontDestroyOnLoad(gameObject);
 
     }
@@ -334,5 +335,31 @@ public class GameManager : MonoBehaviour
 
         // Load the new level
         SceneManager.LoadScene(1);
+    }
+
+    
+}
+
+[System.Serializable]
+public class InputSettings
+{
+    public MoveInputController.MoveControlType moveControlType = MoveInputController.MoveControlType.Joystick;
+    public PlaceBombInputController.PlaceBombControlType placeBombControlType = PlaceBombInputController.PlaceBombControlType.Button;
+
+    public InputSettings()
+    {
+        // Default constructor
+        if (PlatformUtils.IsMobilePlatform())
+        {
+            Debug.Log("Mobile platform detected. Setting default input types.");
+            moveControlType = MoveInputController.MoveControlType.Joystick;
+            placeBombControlType = PlaceBombInputController.PlaceBombControlType.Button;
+        }
+        else
+        {
+            Debug.Log("Non-mobile platform detected. Setting default input types.");
+            moveControlType = MoveInputController.MoveControlType.Keyboard;
+            placeBombControlType = PlaceBombInputController.PlaceBombControlType.Keyboard;
+        }
     }
 }

@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEngine.Tilemaps;
 using System.Collections;
-using UnityEngine.UI;
 
 public class MainUIHandler : MonoBehaviour
 {
@@ -11,10 +10,9 @@ public class MainUIHandler : MonoBehaviour
     [SerializeField] private GameObject gameWinnerUI;
     [SerializeField] private GameObject levelLoadUI;
     [SerializeField] private GameObject UIMoblie;
-    [SerializeField] private Button buttonAreaPlaceBomb;
-    [SerializeField] private Button buttonPlaceBomb;
-    [SerializeField] private JoystickController joystickController;
-    [SerializeField] private DpadController dpadController;
+
+    [SerializeField] private MoveInputController moveInputController;
+    [SerializeField] private PlaceBombInputController placeBombInputController;
     [SerializeField] private GameObject mainCamera;
 
     [SerializeField] private GameObject player;
@@ -22,20 +20,13 @@ public class MainUIHandler : MonoBehaviour
     private CameraFollow camFollow;
     void Start()
     {
-        // #if UNITY_ANDROID || UNITY_IOS
-        //         UIMoblie.SetActive(true);
-        //         Debug.Log("Mobile UI is active");
-        // #else
-        //     UIMoblie.SetActive(false);
-        //     Debug.Log("Mobile UI is inactive");
-        // #endif
-        if (IsMobilePlatform())
+        if (PlatformUtils.IsMobilePlatform())
         {
             UIMoblie.SetActive(true);
         }
         else
         {
-            UIMoblie.SetActive(false);
+            UIMoblie.SetActive(true);
         }
 
         StartCoroutine(LoadLevelLoadingUI());
@@ -74,7 +65,11 @@ public class MainUIHandler : MonoBehaviour
 
     private void LoadLevel()
     {
-        if (isGameManagerNull()) return;
+        if (isGameManagerNull())
+        {
+            SceneManager.LoadScene(0); // Load the menu scene (index 0)
+            return;
+        }
 
         GameManager.Instance.ClearLevel();
 
@@ -90,18 +85,8 @@ public class MainUIHandler : MonoBehaviour
 
         GameManager.Instance.AssignPlayer(player);
 
-        buttonPlaceBomb.onClick.AddListener(() =>
-        {
-            player.GetComponent<BombController>().ButtonPlaceBomb();
-        });
-
-        buttonAreaPlaceBomb.onClick.AddListener(() =>
-        {
-            player.GetComponent<BombController>().ButtonPlaceBomb();
-        });
-
-        dpadController.player = player.GetComponent<PlayerController>();
-        joystickController.player = player.GetComponent<PlayerController>();
+        moveInputController.BindPlayer(player);
+        placeBombInputController.BindPlayer(player);
 
         // if (IsMobilePlatform())
         // {
@@ -125,12 +110,6 @@ public class MainUIHandler : MonoBehaviour
         levelLoadUI.SetActive(true);
         yield return new WaitForSeconds(2.0f);
         levelLoadUI.SetActive(false);
-    }
-
-    bool IsMobilePlatform()
-    {
-        return Application.platform == RuntimePlatform.Android
-            || Application.platform == RuntimePlatform.IPhonePlayer;
     }
 
     bool isGameManagerNull()
