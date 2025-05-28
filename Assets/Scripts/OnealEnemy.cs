@@ -28,7 +28,7 @@ public class OnealEnemy : Enemy
 
     protected override void FixedUpdate()
     {
-        if (isFainted) return;
+        if (isDead) return;
         base.FixedUpdate();
 
         timer -= Time.fixedDeltaTime;

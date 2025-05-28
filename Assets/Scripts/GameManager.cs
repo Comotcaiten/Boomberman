@@ -29,13 +29,10 @@ public class GameManager : MonoBehaviour
 
     public int levelIndex { get; private set; } = 1;
 
-    private string path { get { return Application.dataPath + "/Levels/Level" + levelIndex + ".txt"; } }
-
-
     // In Level
     private List<GameObject> enemies = new List<GameObject>();
 
-    private bool isGameOver = false;
+    public bool isGameOver { get; private set; }= false;
     public bool isGameWin { get; private set; } = false;
 
     private GameObject gameOverUI;
@@ -244,7 +241,7 @@ public class GameManager : MonoBehaviour
             enemies[i].GetComponent<Enemy>().FreezeMovement();
         }
 
-        ClearForGameOver();
+        ClearForResetGame();
     }
 
     public void GameWin()
@@ -260,6 +257,8 @@ public class GameManager : MonoBehaviour
         {
             enemies[i].GetComponent<Enemy>().FreezeMovement();
         }
+
+        ClearForResetGame();
     }
 
     public void UpdateEnemyCount()
@@ -276,10 +275,14 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void ClearForGameOver()
+    public void ClearForResetGame()
     {
+        // Dọn dẹp các đối tượng cần thiết cho game over
         totalscore = 0;
         levelIndex = 1;
+        isGameOver = false;
+        isGameWin = false;
+        enemies.Clear();
     }
 
     private IEnumerator LoadGameOverUI()

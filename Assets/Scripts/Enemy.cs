@@ -102,7 +102,7 @@ public abstract class Enemy : MonoBehaviour
         {
             Debug.Log($"Enemy {gameObject.name} đã bị hạ gục");
             StartCoroutine(DeathAfter());
-            ScorePoint.addScore(score);
+            ScorePoint.AddScore(score);
             FreezeMovement();
         }
     }

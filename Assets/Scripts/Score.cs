@@ -7,10 +7,10 @@ public class Score : MonoBehaviour
 
     void Start()
     {
-        addScore(GameManager.Instance.totalscore);
+        AddScore(GameManager.Instance.totalscore);
     }
 
-    public void addScore(int score)
+    public void AddScore(int score)
     {
         if (GameManager.Instance == null)
         {

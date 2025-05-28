@@ -44,9 +44,14 @@ public class MainUIHandler : MonoBehaviour
 
     public void OnBackMenuButtonClicked()
     {
+        if (!isGameManagerNull())
+        {
+            GameManager.Instance.ClearForResetGame();
+        }
         SceneManager.LoadScene(0); // Load the menu scene (index 0)
     }
 
+    // Reset Game
     public void OnRestartButtonClicked()
     {
         if (isGameManagerNull())
@@ -54,7 +59,7 @@ public class MainUIHandler : MonoBehaviour
             SceneManager.LoadScene(0); // Load the menu scene (index 0)
             return;
         }
-        GameManager.Instance.ClearForNextLevel();
+        GameManager.Instance.ClearForResetGame();
         SceneManager.LoadScene(1); // Load the main scene (index 1)
     }
 

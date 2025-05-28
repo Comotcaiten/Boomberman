@@ -23,6 +23,7 @@ public class BallomEnemy : Enemy
 
     protected override void FixedUpdate()
     {
+        if (isDead) return;
         base.FixedUpdate();
 
         timer -= Time.fixedDeltaTime;
