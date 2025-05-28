@@ -16,24 +16,12 @@ public class PlayerController : MonoBehaviour
 
     private bool canControl = true;
 
-    [SerializeField] private AudioClip playerAudioDeath;
-    [SerializeField] private AudioClip playerAudioGetItem;
-    [SerializeField] private AudioClip playerAudioMove;
-
-    [SerializeField] private AudioSource audioSourceEffect;
-    [SerializeField] private AudioSource audioSourceMove;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         playerRb = GetComponent<Rigidbody2D>();
         moveSpeed = speed;
 
-    }
-
-    void Update()
-    {
-        
     }
 
     void FixedUpdate()
@@ -69,16 +57,8 @@ public class PlayerController : MonoBehaviour
                 lastMovePos.y = Mathf.Sign(moveInput.y);
             }
 
-            Debug.Log("Play Sound Move");
-            audioSourceMove.Play();
-
             animator.SetFloat("LastPosX", lastMovePos.x);
             animator.SetFloat("LastPosY", lastMovePos.y);
-        }
-        else
-        {
-            Debug.Log("Stop play Sound Move");
-            audioSourceMove.Stop();
         }
 
     }
@@ -93,7 +73,6 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.GameOver();
 
             FreezeMovement();
-            audioSourceEffect.PlayOneShot(playerAudioDeath);
             canControl = false;
         }
         isDead = value;
@@ -113,9 +92,10 @@ public class PlayerController : MonoBehaviour
     {
         if (item == null) return;
         item.gameObject.SetActive(false);
-        audioSourceEffect.PlayOneShot(playerAudioGetItem);
         // Thực hiện hiệu ứng của item
         StartCoroutine(item.Effect());
+
+        SoundManager.PlaySound(SoundType.GETITEM, 0.5f);
     }
 
     public void FreezeMovement()

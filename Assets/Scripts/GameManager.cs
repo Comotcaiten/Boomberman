@@ -370,13 +370,13 @@ public class InputSettings
         // Default constructor
         if (PlatformUtils.IsMobilePlatform())
         {
-            Debug.Log("Mobile platform detected. Setting default input types.");
+            // Debug.Log("Mobile platform detected. Setting default input types.");
             moveControlType = MoveInputController.MoveControlType.Joystick;
             placeBombControlType = PlaceBombInputController.PlaceBombControlType.Button;
         }
         else
         {
-            Debug.Log("Non-mobile platform detected. Setting default input types.");
+            // Debug.Log("Non-mobile platform detected. Setting default input types.");
             moveControlType = MoveInputController.MoveControlType.Keyboard;
             placeBombControlType = PlaceBombInputController.PlaceBombControlType.Keyboard;
         }

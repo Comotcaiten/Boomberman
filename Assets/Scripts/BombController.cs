@@ -16,9 +16,6 @@ public class BombController : MonoBehaviour
 
     public List<Vector2> bombsPos;
 
-    [SerializeField] private AudioClip audioPlaceBomb;
-    [SerializeField] private AudioSource audioSourcePlaceBomb;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -33,20 +30,9 @@ public class BombController : MonoBehaviour
         // Chỉ cho phép đặt đúng số lượng bomb nếu số lượng bomb (bombRemaining hết thì phải đợi hồi)
         if (bombRemaining > 0 && (Input.GetKeyDown(KeyCode.Space)))
         {
-            audioSourcePlaceBomb.PlayOneShot(audioPlaceBomb);
+            SoundManager.PlaySound(SoundType.PLACEBOMB);
             StartCoroutine(PlaceBomb());
         }
-
-        // if (bombRemaining > 0)
-        // {
-        //     // Check: bấm phím hoặc chạm màn hình
-        //     if (Input.GetKeyDown(KeyCode.Space) || 
-        //         (Input.GetMouseButtonDown(0) && !IsPointerOverUI()))
-        //     {
-        //         audioSourcePlaceBomb.PlayOneShot(audioPlaceBomb);
-        //         StartCoroutine(PlaceBomb());
-        //     }
-        // }
     }
 
     public void ButtonPlaceBomb()
@@ -55,7 +41,7 @@ public class BombController : MonoBehaviour
         // Chỉ cho phép đặt đúng số lượng bomb nếu số lượng bomb (bombRemaining hết thì phải đợi hồi)
         if (bombRemaining > 0)
         {
-            audioSourcePlaceBomb.PlayOneShot(audioPlaceBomb);
+            SoundManager.PlaySound(SoundType.PLACEBOMB);
             StartCoroutine(PlaceBomb());
         }
     }
@@ -110,10 +96,4 @@ public class BombController : MonoBehaviour
         bombAmount -= amount;
         bombRemaining -= amount;
     }
-    
-bool IsPointerOverUI()
-{
-    // Nếu đang ở mobile, kiểm tra có chạm vào UI không
-    return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
-}
 }

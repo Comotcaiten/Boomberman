@@ -61,7 +61,7 @@ public class MoveInputController : InputController
         switch (moveType)
         {
             case MoveControlType.Joystick:
-                return new Vector2(joystick.Horizontal, joystick.Vertical);
+                return new Vector2(joystick.Horizontal, joystick.Vertical).normalized;
             case MoveControlType.Dpad:
                 return new Vector2(dpad.Horizontal, dpad.Vertical);
             case MoveControlType.Keyboard:
