@@ -66,8 +66,8 @@ public class Bomb : MonoBehaviour
         Explode(rangeDestruct, center, Vector3Int.left);
         Explode(rangeDestruct, center, Vector3Int.right);
 
-        // Nhac nhở âm thanh nổ
-        SoundManager.PlaySound(SoundType.EXPLOSION, 0.5f);
+        // Âm thanh nổ
+        SoundManager.PlaySound(SoundType.EXPLOSION);
 
         Destroy(gameObject);
 

@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public enum SoundType
 {
@@ -12,70 +11,58 @@ public enum SoundType
     MUSIC,
 }
 
-[RequireComponent(typeof(AudioSource))] 
+[RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
-    [SerializeField] private ListSoundClips listSoundClips;
-    private static SoundManager Instance;
-    private AudioSource audioSource;
+    public static SoundManager Instance;
 
+    [SerializeField] private SoundClipLibrary soundLibrary;
+
+    [Header("Volume")]
+    [Range(0f, 1f)] public float musicVolume = 0.5f;
+    [Range(0f, 1f)] public float sfxVolume = 0.5f;
+
+    private AudioSource sfxSource;
     private AudioSource musicSource;
-    void Awake()
+
+    private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null) { Destroy(gameObject); return; }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // Tạo 2 AudioSource riêng
+        sfxSource = gameObject.AddComponent<AudioSource>();
+        musicSource = gameObject.AddComponent<AudioSource>();
+        musicSource.loop = true;
+    }
+
+    public static void PlaySound(SoundType type)
+    {
+        AudioClip clip = Instance.soundLibrary.GetClip(type);
+        if (clip == null) return;
+
+        if (type == SoundType.MUSIC)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            Instance.musicSource.clip = clip;
+            Instance.musicSource.volume = Instance.musicVolume;
+            Instance.musicSource.Play();
         }
         else
         {
-            Destroy(gameObject);
+            Instance.sfxSource.PlayOneShot(clip, Instance.sfxVolume);
         }
     }
-    void Start()
+
+    public static void SetMusicVolume(float value)
     {
-        audioSource = GetComponent<AudioSource>();
+        Instance.musicVolume = value;
+        Instance.musicSource.volume = value;
     }
 
-    public static void PlaySound(SoundType sound, float volume = 1.0f)
+    public static void SetSFXVolume(float value)
     {
-        // Instance.audioSource.PlayOneShot(Instance.soundClips[(int)sound], volume);
-        Instance.audioSource.PlayOneShot(Instance.listSoundClips.GetAudioClip(sound), volume);
-    }
-}
-
-
-[Serializable]
-public struct SoundClips
-{
-    public SoundType soundType;
-    public AudioClip audioClip;
-}
-
-[Serializable]
-public class ListSoundClips
-{
-    public List<SoundClips> soundClips;
-
-    public ListSoundClips()
-    {
-        soundClips = new List<SoundClips>();
-    }
-
-    public void Add(SoundType soundType, AudioClip audioClip)
-    {
-        soundClips.Add(new SoundClips { soundType = soundType, audioClip = audioClip });
-    }
-
-    public AudioClip GetAudioClip(SoundType soundType)
-    {
-        foreach (var clip in soundClips)
-        {
-            if (clip.soundType == soundType)
-            {
-                return clip.audioClip;
-            }
-        }
-        return null;
+        Instance.sfxVolume = value;
     }
 }

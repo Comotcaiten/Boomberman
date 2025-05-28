@@ -31,6 +31,8 @@ public class MainUIHandler : MonoBehaviour
 
         StartCoroutine(LoadLevelLoadingUI());
         LoadLevel();
+
+        SoundManager.PlaySound(SoundType.MUSIC);
     }
 
     public void OnExitButtonClicked()

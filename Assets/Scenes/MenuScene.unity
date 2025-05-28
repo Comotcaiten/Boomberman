@@ -812,20 +812,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe6b1c83c3df094bb02ab0f4708f82c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  listSoundClips:
-    soundClips:
-    - soundType: 0
-      audioClip: {fileID: 8300000, guid: 16e3d3f8c6b2ea343803d43f7d061af8, type: 3}
-    - soundType: 1
-      audioClip: {fileID: 8300000, guid: 6645d5f1edd45dc42a2baf2283557009, type: 3}
-    - soundType: 2
-      audioClip: {fileID: 8300000, guid: 4997d53bf6337c84fb4908cb606fdc64, type: 3}
-    - soundType: 3
-      audioClip: {fileID: 8300000, guid: 8641f414601f30e4eabc9aee837fdc75, type: 3}
-    - soundType: 4
-      audioClip: {fileID: 8300000, guid: de8220787fc5ae344ac202c28eba51eb, type: 3}
-    - soundType: 5
-      audioClip: {fileID: 8300000, guid: f31a3cb533c2df045be19825e5a54760, type: 3}
+  soundLibrary: {fileID: 11400000, guid: 655a206635fc58e4fa85bba19f2041c8, type: 2}
+  musicVolume: 0.5
+  sfxVolume: 0.5
 --- !u!82 &846012383
 AudioSource:
   m_ObjectHideFlags: 0

@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlaySoundEnter : StateMachineBehaviour
 {
     [SerializeField] private SoundType soundType;
-    [SerializeField, Range(0, 1)] private float volume = 1.0f;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -17,7 +16,7 @@ public class PlaySoundEnter : StateMachineBehaviour
         }
 
         // Play the sound using SoundManager
-        SoundManager.PlaySound(soundType, volume);
+        SoundManager.PlaySound(soundType);
     }
     
 }
