@@ -9,7 +9,13 @@ public class SettingGameController : MonoBehaviour
 
     public TMP_Dropdown moveDropdown;
     public TMP_Dropdown placeBombDropdown;
-    
+
+    public Slider musicVolumeSlider;
+    public Slider sfxVolumeSlider;
+
+    public TextMeshProUGUI musicVolumeText;
+    public TextMeshProUGUI sfxVolumeText;
+
     List<string> moveControlOptions = new List<string> { "Joystick", "Dpad", "Keyboard" };
     List<string> placeBombControlOptions = new List<string> { "Button", "Area", "Keyboard" };
 
@@ -24,13 +30,23 @@ public class SettingGameController : MonoBehaviour
         // Initialize dropdowns
         moveDropdown.ClearOptions();
         moveDropdown.AddOptions(moveControlOptions);
-        moveDropdown.value = (int)moveInputController.moveType;
+        moveDropdown.value = (int)GameManager.Instance.inputSettings.moveControlType;
+        Debug.Log("Move DropDown: " + moveDropdown.value);
         moveDropdown.onValueChanged.AddListener(OnMoveTypeChanged);
 
         placeBombDropdown.ClearOptions();
         placeBombDropdown.AddOptions(placeBombControlOptions);
-        placeBombDropdown.value = (int)placeBombInputController.placeBombType;
+        placeBombDropdown.value = (int)GameManager.Instance.inputSettings.placeBombControlType;
         placeBombDropdown.onValueChanged.AddListener(OnPlaceBombControlChanged);
+
+        musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
+        sfxVolumeSlider.onValueChanged.AddListener(SetSFXVolume);
+
+        musicVolumeSlider.value = SoundManager.Instance.musicVolume;
+        musicVolumeText.text = (musicVolumeSlider.value * 100).ToString("F0") + "%"; // Update the text to show percentage
+
+        sfxVolumeSlider.value = SoundManager.Instance.sfxVolume;
+        sfxVolumeText.text = (sfxVolumeSlider.value * 100).ToString("F0") + "%"; // Update the text to show percentage
     }
 
     private void OnMoveTypeChanged(int index)
@@ -48,6 +64,18 @@ public class SettingGameController : MonoBehaviour
         placeBombInputController.placeBombType = GameManager.Instance.inputSettings.placeBombControlType;
         placeBombInputController.UpdateUIState();
         Debug.Log("Place bomb control changed to: " + placeBombInputController.placeBombType);
+    }
+
+    public void SetMusicVolume(float value)
+    {
+        SoundManager.SetMusicVolume(value);
+        musicVolumeText.text = (value * 100).ToString("F0") + "%"; // Update the text to show percentage
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        SoundManager.SetSFXVolume(value);
+        sfxVolumeText.text = (value * 100).ToString("F0") + "%"; // Update the text to show percentage
     }
 
 }

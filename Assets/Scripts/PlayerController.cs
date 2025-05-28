@@ -94,6 +94,8 @@ public class PlayerController : MonoBehaviour
         item.gameObject.SetActive(false);
         // Thực hiện hiệu ứng của item
         StartCoroutine(item.Effect());
+
+        SoundManager.PlaySound(SoundType.GETITEM);
     }
 
     public void FreezeMovement()
