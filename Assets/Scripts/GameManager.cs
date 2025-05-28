@@ -1,10 +1,8 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
-using System.IO;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,13 +29,10 @@ public class GameManager : MonoBehaviour
 
     public int levelIndex { get; private set; } = 1;
 
-    private string path { get { return Application.dataPath + "/Levels/Level" + levelIndex + ".txt"; } }
-
-
     // In Level
     private List<GameObject> enemies = new List<GameObject>();
 
-    private bool isGameOver = false;
+    public bool isGameOver { get; private set; }= false;
     public bool isGameWin { get; private set; } = false;
 
     private GameObject gameOverUI;
@@ -46,10 +41,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<TextAsset> levelFiles;
 
     private GameObject player;
+    private GameObject scoreText;
+
+    public int totalscore = 0;
+
+    public InputSettings inputSettings;
 
 
     private void Awake()
     {
+
         if (Instance != null)
         {
             Destroy(gameObject);
@@ -57,7 +58,9 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+        Instance.inputSettings = new InputSettings();
         DontDestroyOnLoad(gameObject);
+
     }
 
     public void LoadLevel()
@@ -65,10 +68,6 @@ public class GameManager : MonoBehaviour
 
         try
         {
-            // // C1
-            // FileLevelLoader.Load(path);4
-            // Debug.Log($"Loading level from {path}");
-
             // C2
             if (levelIndex - 1 < 0 || levelIndex - 1 >= levelFiles.Count)
             {
@@ -114,7 +113,6 @@ public class GameManager : MonoBehaviour
                         case '2':
                             Spawn(enemyOnealEnemyPrefab, worldPos, "EnemyOneal");
                             // Spawn(enemyBalloomPrefab, worldPos, "EnemyBalloom");
-
                             break;
                         case 'b':
                             SpawnItemWithBrick(powerupBombPrefab, tilePos, worldPos);
@@ -130,7 +128,6 @@ public class GameManager : MonoBehaviour
                     SetTile(grassTilemap, grassTile, tilePos); // luôn vẽ grass dưới cùng
                 }
             }
-
         }
         catch (System.Exception e)
         {
@@ -243,6 +240,8 @@ public class GameManager : MonoBehaviour
         {
             enemies[i].GetComponent<Enemy>().FreezeMovement();
         }
+
+        ClearForResetGame();
     }
 
     public void GameWin()
@@ -251,7 +250,58 @@ public class GameManager : MonoBehaviour
 
         isGameWin = true;
         Debug.Log("You Win!");
+
         // Handle game win logic here (e.g., show win screen, load next level, etc.)
+        StartCoroutine(LoadGameWinnerUI());
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            enemies[i].GetComponent<Enemy>().FreezeMovement();
+        }
+
+        ClearForResetGame();
+    }
+
+    public void UpdateEnemyCount()
+    {
+        enemies.RemoveAll(enemy => enemy.GetComponent<Enemy>().isDead);
+        Debug.Log($"Enemies count after update: {enemies.Count}");
+    }
+
+    public void ClearForNextLevel()
+    {
+        isGameOver = false;
+        isGameWin = false;
+        enemies.Clear();
+
+    }
+
+    public void ClearForResetGame()
+    {
+        // Dọn dẹp các đối tượng cần thiết cho game over
+        totalscore = 0;
+        levelIndex = 1;
+        isGameOver = false;
+        isGameWin = false;
+        enemies.Clear();
+    }
+
+    private IEnumerator LoadGameOverUI()
+    {
+        yield return new WaitForSeconds(2f);
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(true);
+            gameWinnerUI.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("Game Over UI is not assigned.");
+        }
+    }
+
+    private IEnumerator LoadGameWinnerUI()
+    {
+        yield return new WaitForSeconds(2f);
         if (gameWinnerUI != null)
         {
             gameWinnerUI.SetActive(true);
@@ -263,56 +313,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void DebugEnemies()
-    {
-        Debug.Log($"Enemies count: {enemies.Count}");
-    }
-
-    public void UpdateEnemyCount()
-    {
-        enemies.RemoveAll(enemy => enemy.GetComponent<Enemy>().isFainted);
-        Debug.Log($"Enemies count after update: {enemies.Count}");
-
-        if (enemies.Count == 0 && !isGameOver)
-        {
-            Debug.Log("All enemies defeated!");
-            // GameWin();
-            isGameWin = true;
-        }
-
-    }
-
-    public void ClearLevel()
-    {
-        isGameOver = false;
-        isGameWin = false;
-        enemies.Clear();
-
-        levelIndex = 1;
-    }
-
-    private IEnumerator LoadGameOverUI()
-    {
-        yield return new WaitForSeconds(2f);
-        if (gameOverUI != null)
-        {
-            gameOverUI.SetActive(true);
-        }
-        else
-        {
-            Debug.Log("Game Over UI is not assigned.");
-        }
-    }
-
     public void PortalActive()
     {
+        // Đầu tiên kiểm tra player và enemies
+        // Cập nhập số lượng kẻ thù còn lại trước
         UpdateEnemyCount();
+        // Nếu player không chết và không còn kẻ thù nào thì mới cho phép đi qua cổng
+        if (player == null)
+        {
+            Debug.LogError("Player is not assigned. Cannot proceed to the next level.");
+            return;
+        }
 
+        if (player.GetComponent<PlayerController>().isDead)
+        {
+            Debug.Log("Player is dead. Cannot proceed to the next level.");
+            return;
+        }
+
+        if (enemies.Count > 0)
+        {
+            Debug.Log("Enemies are still present. Cannot proceed to the next level.");
+            return;
+        }
+
+        // Nếu tất cả điều kiện trên đều thỏa mãn thì tăng level index và load level mới
         SetLevelIndex(levelIndex + 1);
 
-        // Check if the level index is valid
-
-        // C2
+        // Kiểm tra xem level index có vượt quá số lượng level không
         if (levelIndex > levelFiles.Count)
         {
             Debug.Log("No more levels. You win the game!");
@@ -321,10 +349,36 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        ClearLevel();
+        // Dọn dẹp các đối tượng cũ cần cho level trước khi load level mới
+        ClearForNextLevel();
 
         // Load the new level
         SceneManager.LoadScene(1);
     }
 
+    
+}
+
+[System.Serializable]
+public class InputSettings
+{
+    public MoveInputController.MoveControlType moveControlType = MoveInputController.MoveControlType.Joystick;
+    public PlaceBombInputController.PlaceBombControlType placeBombControlType = PlaceBombInputController.PlaceBombControlType.Button;
+
+    public InputSettings()
+    {
+        // Default constructor
+        if (PlatformUtils.IsMobilePlatform())
+        {
+            // Debug.Log("Mobile platform detected. Setting default input types.");
+            moveControlType = MoveInputController.MoveControlType.Joystick;
+            placeBombControlType = PlaceBombInputController.PlaceBombControlType.Button;
+        }
+        else
+        {
+            // Debug.Log("Non-mobile platform detected. Setting default input types.");
+            moveControlType = MoveInputController.MoveControlType.Keyboard;
+            placeBombControlType = PlaceBombInputController.PlaceBombControlType.Keyboard;
+        }
+    }
 }

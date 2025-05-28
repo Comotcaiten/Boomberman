@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEngine.Tilemaps;
 using System.Collections;
-using UnityEngine.UI;
 
 public class MainUIHandler : MonoBehaviour
 {
@@ -11,31 +10,29 @@ public class MainUIHandler : MonoBehaviour
     [SerializeField] private GameObject gameWinnerUI;
     [SerializeField] private GameObject levelLoadUI;
     [SerializeField] private GameObject UIMoblie;
-    [SerializeField] private Button buttonPlaceBomb;
-    [SerializeField] private JoystickController joystickController;
+
+    [SerializeField] private MoveInputController moveInputController;
+    [SerializeField] private PlaceBombInputController placeBombInputController;
     [SerializeField] private GameObject mainCamera;
 
     [SerializeField] private GameObject player;
+
+    private CameraFollow camFollow;
     void Start()
     {
-        // #if UNITY_ANDROID || UNITY_IOS
-        //         UIMoblie.SetActive(true);
-        //         Debug.Log("Mobile UI is active");
-        // #else
-        //     UIMoblie.SetActive(false);
-        //     Debug.Log("Mobile UI is inactive");
-        // #endif
-        if (IsMobilePlatform())
+        if (PlatformUtils.IsMobilePlatform())
         {
             UIMoblie.SetActive(true);
         }
         else
         {
-            UIMoblie.SetActive(false);
+            UIMoblie.SetActive(true);
         }
 
         StartCoroutine(LoadLevelLoadingUI());
         LoadLevel();
+
+        SoundManager.PlaySound(SoundType.MUSIC);
     }
 
     public void OnExitButtonClicked()
@@ -49,12 +46,22 @@ public class MainUIHandler : MonoBehaviour
 
     public void OnBackMenuButtonClicked()
     {
+        if (!isGameManagerNull())
+        {
+            GameManager.Instance.ClearForResetGame();
+        }
         SceneManager.LoadScene(0); // Load the menu scene (index 0)
     }
 
+    // Reset Game
     public void OnRestartButtonClicked()
     {
-        GameManager.Instance.ClearLevel();
+        if (isGameManagerNull())
+        {
+            SceneManager.LoadScene(0); // Load the menu scene (index 0)
+            return;
+        }
+        GameManager.Instance.ClearForResetGame();
         SceneManager.LoadScene(1); // Load the main scene (index 1)
     }
 
@@ -65,14 +72,13 @@ public class MainUIHandler : MonoBehaviour
 
     private void LoadLevel()
     {
-        if (GameManager.Instance == null)
+        if (isGameManagerNull())
         {
-            gameOverUI.SetActive(true);
-            Debug.Log("GameManager instance is null. Make sure GameManager is initialized.");
+            SceneManager.LoadScene(0); // Load the menu scene (index 0)
             return;
         }
 
-        GameManager.Instance.ClearLevel();
+        GameManager.Instance.ClearForNextLevel();
 
         GameManager.Instance.AssignTilemap(
             GameObject.Find("Destruction").GetComponent<Tilemap>(),
@@ -86,20 +92,22 @@ public class MainUIHandler : MonoBehaviour
 
         GameManager.Instance.AssignPlayer(player);
 
-        buttonPlaceBomb.onClick.AddListener(() =>
-        {
-            player.GetComponent<BombController>().ButtonPlaceBomb();
-        });
+        moveInputController.BindPlayer(player);
+        placeBombInputController.BindPlayer(player);
 
-        joystickController.player = player.GetComponent<PlayerController>();
+        // if (IsMobilePlatform())
+        // {
+        //     camFollow = mainCamera.AddComponent<CameraFollow>();
+        //     camFollow.player = GameObject.FindGameObjectWithTag("Player");
+        //     camFollow.offset = new Vector3(0, 0, -20);
+        //     camFollow.smoothSpeed = 0.125f;
+        // }
 
-        if (IsMobilePlatform())
-        {
-            mainCamera.AddComponent<CameraFollow>().player = GameObject.FindGameObjectWithTag("Player");
-            mainCamera.GetComponent<CameraFollow>().offset = new Vector3(0, 0, -20);
-            mainCamera.GetComponent<CameraFollow>().smoothSpeed = 0.125f;
-            mainCamera.GetComponent<CameraFollow>().enabled = true;
-        }
+        camFollow = mainCamera.AddComponent<CameraFollow>();
+        camFollow.player = GameObject.FindGameObjectWithTag("Player");
+        camFollow.offset = new Vector3(0, -6, -10);
+        camFollow.smoothSpeed = 0.125f;
+
 
         GameManager.Instance.LoadLevel();
 
@@ -112,9 +120,15 @@ public class MainUIHandler : MonoBehaviour
         levelLoadUI.SetActive(false);
     }
 
-    bool IsMobilePlatform()
+    bool isGameManagerNull()
     {
-        return Application.platform == RuntimePlatform.Android
-            || Application.platform == RuntimePlatform.IPhonePlayer;
+        if (GameManager.Instance == null)
+        {
+            gameOverUI.SetActive(true);
+            Debug.Log("GameManager instance is null. Make sure GameManager is initialized.");
+            return true;
+        }
+        return false;
     }
+
 }

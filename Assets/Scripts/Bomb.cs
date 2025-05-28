@@ -21,8 +21,6 @@ public class Bomb : MonoBehaviour
 
     public int rangeDestruct = 1;
 
-    [SerializeField] private GameObject bombSoundPrefab;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -68,8 +66,8 @@ public class Bomb : MonoBehaviour
         Explode(rangeDestruct, center, Vector3Int.left);
         Explode(rangeDestruct, center, Vector3Int.right);
 
-        // Phát âm thanh
-        PlaySound();
+        // Âm thanh nổ
+        SoundManager.PlaySound(SoundType.EXPLOSION);
 
         Destroy(gameObject);
 
@@ -128,10 +126,5 @@ public class Bomb : MonoBehaviour
             }
 
         }
-    }
-
-    void PlaySound()
-    {
-        GameObject sound = Instantiate(bombSoundPrefab, transform.position, Quaternion.identity);
     }
 }

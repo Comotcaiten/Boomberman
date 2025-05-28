@@ -10,19 +10,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Animator animator;
 
-    public bool isFainted { get; private set; } = false;
+    public bool isDead { get; private set; } = false;
 
     private Vector2 lastMovePos;
 
     private bool canControl = true;
-
-    [SerializeField] private AudioClip playerAudioDeath;
-    [SerializeField] private AudioClip playerAudioGetItem;
-    [SerializeField] private AudioClip playerAudioMove;
-
-    [SerializeField] private AudioSource audioSourceEffect;
-    [SerializeField] private AudioSource audioSourceMove;
-    private bool isMoving = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,44 +31,30 @@ public class PlayerController : MonoBehaviour
 
     void MoveInput()
     {
-        if (isFainted || !canControl) return;
-
-        // moveInput.x = Input.GetAxis("Horizontal");
-        // moveInput.y = Input.GetAxis("Vertical");
-        // if (moveInput != Vector2.zero)
-        // {
-        //     if (!isMoving)
-        //     {
-        //         // audioSourceMove.PlayOneShot(playerAudioMove);
-        //         audioSourceMove.Play();
-        //         isMoving = true;
-        //     }
-        // }
-        // else
-        // {
-        //     audioSourceMove.Stop();
-        //     isMoving = false;
-        // }
+        if (isDead || !canControl) return;
 
         animator.SetFloat("horizontal", moveInput.x);
         animator.SetFloat("vertical", moveInput.y);
         animator.SetFloat("speed", (moveInput.x * moveInput.x + moveInput.y * moveInput.y));
 
-        playerRb.linearVelocity = ((Vector2.up * moveInput.y) + (Vector2.right * moveInput.x)) * moveSpeed;
+        playerRb.MovePosition(playerRb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
 
         if (moveInput != Vector2.zero)
         {
             if (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y))
             {
                 // Ưu tiên hướng ngang
-                lastMovePos.x = moveInput.x / Mathf.Abs(moveInput.x);
+                // bỏ vì Gây lỗi chia 0 nếu moveInput.x == 0 (hiếm, nhưng có thể xảy ra nếu input dao động nhỏ).
+                // lastMovePos.x = moveInput.x / Mathf.Abs(moveInput.x);
+                // Mathf.Sign()
+                lastMovePos.x = Mathf.Sign(moveInput.x);
                 lastMovePos.y = 0;
             }
             else
             {
                 // hướng dọc
                 lastMovePos.x = 0;
-                lastMovePos.y = moveInput.y / Mathf.Abs(moveInput.y);
+                lastMovePos.y = Mathf.Sign(moveInput.y);
             }
 
             animator.SetFloat("LastPosX", lastMovePos.x);
@@ -85,9 +63,9 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public void SetIsFainted(bool value)
+    public void SetIsDead(bool value)
     {
-        if (isFainted == true) return;
+        if (isDead == true) return;
         if (value == true)
         {
             animator.SetBool("IsDead", true);
@@ -95,17 +73,18 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.GameOver();
 
             FreezeMovement();
-            audioSourceEffect.PlayOneShot(playerAudioDeath);
             canControl = false;
         }
-        isFainted = value;
+        isDead = value;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            SetIsFainted(true);
+            SetIsDead(true);
+
+            Physics2D.IgnoreCollision(collision.collider, GetComponent<CircleCollider2D>());
         }
     }
 
@@ -113,9 +92,10 @@ public class PlayerController : MonoBehaviour
     {
         if (item == null) return;
         item.gameObject.SetActive(false);
-        audioSourceEffect.PlayOneShot(playerAudioGetItem);
         // Thực hiện hiệu ứng của item
         StartCoroutine(item.Effect());
+
+        SoundManager.PlaySound(SoundType.GETITEM);
     }
 
     public void FreezeMovement()
@@ -130,7 +110,6 @@ public class PlayerController : MonoBehaviour
 
     public void UnfreezeMovement()
     {
-        playerRb.constraints = RigidbodyConstraints2D.None; // Bỏ ràng buộc
         playerRb.constraints = RigidbodyConstraints2D.FreezeRotation; // Giữ nguyên độ xoay
         moveSpeed = speed; // Đặt tốc độ về 5
     }

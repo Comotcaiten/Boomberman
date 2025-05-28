@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BallomEnemy : Enemy
 {
-    private float directionChangeInterval = 5.0f;
+    private float directionChangeInterval = 1.0f;
     private float timer;
 
     private Vector2[] moveDirs = {
@@ -23,6 +23,7 @@ public class BallomEnemy : Enemy
 
     protected override void FixedUpdate()
     {
+        if (isDead) return;
         base.FixedUpdate();
 
         timer -= Time.fixedDeltaTime;
@@ -38,8 +39,6 @@ public class BallomEnemy : Enemy
 
     protected override void Change()
     {
-        // int path = Random.Range(0,moveDirs.Length);
-        // moveDir = moveDirs[path];
 
         List<Vector2> validDirs = new List<Vector2>();
         foreach (var dir in moveDirs)

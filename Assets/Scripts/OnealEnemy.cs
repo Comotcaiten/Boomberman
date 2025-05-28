@@ -6,6 +6,7 @@ public class OnealEnemy : Enemy
     private float directionChangeInterval = 5.0f;
     private float timer;
 
+    // private float []speeds = { 0f };
     private float []speeds = { 1.0f, 2.0f, 3.0f };
 
     private bool isChasing = false;
@@ -27,7 +28,7 @@ public class OnealEnemy : Enemy
 
     protected override void FixedUpdate()
     {
-        if (isFainted) return;
+        if (isDead) return;
         base.FixedUpdate();
 
         timer -= Time.fixedDeltaTime;
