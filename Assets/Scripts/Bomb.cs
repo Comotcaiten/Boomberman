@@ -1,6 +1,6 @@
-using System.Collections;
-using UnityEngine;
-using UnityEngine.Tilemaps;
+    using System.Collections;
+    using UnityEngine;
+    using UnityEngine.Tilemaps;
 
 public class Bomb : MonoBehaviour
 {
@@ -19,7 +19,9 @@ public class Bomb : MonoBehaviour
 
     private bool playerInside;
 
-    [SerializeField] private int rangeDestruct = 2;
+    public int rangeDestruct = 1;
+
+    [SerializeField] private GameObject bombSoundPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -66,28 +68,32 @@ public class Bomb : MonoBehaviour
         Explode(rangeDestruct, center, Vector3Int.left);
         Explode(rangeDestruct, center, Vector3Int.right);
 
+        // Phát âm thanh
+        PlaySound();
 
         Destroy(gameObject);
 
         // Hiệu ứng nổ ở quả bom - start
         ExplodeEffAt(flameStartPrefab, transform.position, Vector3Int.zero);
+
+        // gameObject.GetComponent<SpriteRenderer>().enabled = false;
     }
 
     void ExplodeEffAt(GameObject flamePrefab, Vector2 position, Vector3Int path)
     {
-            Quaternion rotation = flamePrefab.transform.rotation;
-            if (path == Vector3Int.left)
-            {
-                rotation = Quaternion.Euler(0, 0, 180);
-            }
-            else if (path == Vector3Int.up)
-            {
-                rotation = Quaternion.Euler(0, 0, 90);
-            }
-            else if (path == Vector3Int.down)
-            {
-                rotation = Quaternion.Euler(0, 0, -90);
-            }
+        Quaternion rotation = flamePrefab.transform.rotation;
+        if (path == Vector3Int.left)
+        {
+            rotation = Quaternion.Euler(0, 0, 180);
+        }
+        else if (path == Vector3Int.up)
+        {
+            rotation = Quaternion.Euler(0, 0, 90);
+        }
+        else if (path == Vector3Int.down)
+        {
+            rotation = Quaternion.Euler(0, 0, -90);
+        }
 
         Instantiate(flamePrefab, position, rotation);
     }
@@ -112,13 +118,20 @@ public class Bomb : MonoBehaviour
                 return;
             }
 
-            if (i == range) {
+            if (i == range)
+            {
                 ExplodeEffAt(flameEndPrefab, tileDestruction.GetCellCenterWorld(tilePos), path);
             }
-            else {
+            else
+            {
                 ExplodeEffAt(flameMiddlePrefab, tileDestruction.GetCellCenterWorld(tilePos), path);
             }
 
         }
+    }
+
+    void PlaySound()
+    {
+        GameObject sound = Instantiate(bombSoundPrefab, transform.position, Quaternion.identity);
     }
 }
