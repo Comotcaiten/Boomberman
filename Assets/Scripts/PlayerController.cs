@@ -22,7 +22,6 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private AudioSource audioSourceEffect;
     [SerializeField] private AudioSource audioSourceMove;
-    private bool isMoving = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,6 +29,11 @@ public class PlayerController : MonoBehaviour
         playerRb = GetComponent<Rigidbody2D>();
         moveSpeed = speed;
 
+    }
+
+    void Update()
+    {
+        
     }
 
     void FixedUpdate()
@@ -52,18 +56,29 @@ public class PlayerController : MonoBehaviour
             if (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y))
             {
                 // Ưu tiên hướng ngang
-                lastMovePos.x = moveInput.x / Mathf.Abs(moveInput.x);
+                // bỏ vì Gây lỗi chia 0 nếu moveInput.x == 0 (hiếm, nhưng có thể xảy ra nếu input dao động nhỏ).
+                // lastMovePos.x = moveInput.x / Mathf.Abs(moveInput.x);
+                // Mathf.Sign()
+                lastMovePos.x = Mathf.Sign(moveInput.x);
                 lastMovePos.y = 0;
             }
             else
             {
                 // hướng dọc
                 lastMovePos.x = 0;
-                lastMovePos.y = moveInput.y / Mathf.Abs(moveInput.y);
+                lastMovePos.y = Mathf.Sign(moveInput.y);
             }
+
+            Debug.Log("Play Sound Move");
+            audioSourceMove.Play();
 
             animator.SetFloat("LastPosX", lastMovePos.x);
             animator.SetFloat("LastPosY", lastMovePos.y);
+        }
+        else
+        {
+            Debug.Log("Stop play Sound Move");
+            audioSourceMove.Stop();
         }
 
     }
@@ -115,7 +130,6 @@ public class PlayerController : MonoBehaviour
 
     public void UnfreezeMovement()
     {
-        playerRb.constraints = RigidbodyConstraints2D.None; // Bỏ ràng buộc
         playerRb.constraints = RigidbodyConstraints2D.FreezeRotation; // Giữ nguyên độ xoay
         moveSpeed = speed; // Đặt tốc độ về 5
     }
