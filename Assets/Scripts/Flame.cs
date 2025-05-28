@@ -21,18 +21,19 @@ public class Flame : MonoBehaviour
         {
             Debug.Log("Kill Player");
 
-            collision.gameObject.GetComponent<PlayerController>().SetIsFainted(true);
+            collision.gameObject.GetComponent<PlayerController>().SetIsDead(true);
         }
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Kill Enemy");
 
-            collision.gameObject.GetComponent<Enemy>().SetIsFainted(true);
+            collision.gameObject.GetComponent<Enemy>().SetIsDead(true);
         }
 
         if (collision.gameObject.CompareTag("Bomb"))
         {
             Debug.Log("Hit Bomb");
+            
             collision.gameObject.GetComponent<Bomb>().timeDestory = 0f;
         }
     }

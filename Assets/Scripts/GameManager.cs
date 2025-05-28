@@ -71,10 +71,6 @@ public class GameManager : MonoBehaviour
 
         try
         {
-            // // C1
-            // FileLevelLoader.Load(path);4
-            // Debug.Log($"Loading level from {path}");
-
             // C2
             if (levelIndex - 1 < 0 || levelIndex - 1 >= levelFiles.Count)
             {
@@ -248,8 +244,7 @@ public class GameManager : MonoBehaviour
             enemies[i].GetComponent<Enemy>().FreezeMovement();
         }
 
-        totalscore = 0;
-        levelIndex = 1;
+        ClearForGameOver();
     }
 
     public void GameWin()
@@ -258,7 +253,52 @@ public class GameManager : MonoBehaviour
 
         isGameWin = true;
         Debug.Log("You Win!");
+
         // Handle game win logic here (e.g., show win screen, load next level, etc.)
+        StartCoroutine(LoadGameWinnerUI());
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            enemies[i].GetComponent<Enemy>().FreezeMovement();
+        }
+    }
+
+    public void UpdateEnemyCount()
+    {
+        enemies.RemoveAll(enemy => enemy.GetComponent<Enemy>().isDead);
+        Debug.Log($"Enemies count after update: {enemies.Count}");
+    }
+
+    public void ClearForNextLevel()
+    {
+        isGameOver = false;
+        isGameWin = false;
+        enemies.Clear();
+
+    }
+
+    private void ClearForGameOver()
+    {
+        totalscore = 0;
+        levelIndex = 1;
+    }
+
+    private IEnumerator LoadGameOverUI()
+    {
+        yield return new WaitForSeconds(2f);
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(true);
+            gameWinnerUI.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("Game Over UI is not assigned.");
+        }
+    }
+
+    private IEnumerator LoadGameWinnerUI()
+    {
+        yield return new WaitForSeconds(2f);
         if (gameWinnerUI != null)
         {
             gameWinnerUI.SetActive(true);
@@ -270,59 +310,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void DebugEnemies()
-    {
-        Debug.Log($"Enemies count: {enemies.Count}");
-    }
-
-    public void UpdateEnemyCount()
-    {
-        enemies.RemoveAll(enemy => enemy.GetComponent<Enemy>().isFainted);
-        Debug.Log($"Enemies count after update: {enemies.Count}");
-
-
-        if (enemies.Count == 0 && !isGameOver)
-        {
-            Debug.Log("All enemies defeated!");
-            // GameWin();
-            isGameWin = true;
-        }
-
-    }
-
-    public void ClearLevel()
-    {
-        isGameOver = false;
-        isGameWin = false;
-        enemies.Clear();
-
-    }
-
-    private IEnumerator LoadGameOverUI()
-    {
-        yield return new WaitForSeconds(2f);
-        if (gameOverUI != null)
-        {
-            gameOverUI.SetActive(true);
-        }
-        else
-        {
-            Debug.Log("Game Over UI is not assigned.");
-        }
-    }
-
     public void PortalActive()
     {
+        // Đầu tiên kiểm tra player và enemies
+        // Cập nhập số lượng kẻ thù còn lại trước
         UpdateEnemyCount();
+        // Nếu player không chết và không còn kẻ thù nào thì mới cho phép đi qua cổng
+        if (player == null)
+        {
+            Debug.LogError("Player is not assigned. Cannot proceed to the next level.");
+            return;
+        }
 
+        if (player.GetComponent<PlayerController>().isDead)
+        {
+            Debug.Log("Player is dead. Cannot proceed to the next level.");
+            return;
+        }
+
+        if (enemies.Count > 0)
+        {
+            Debug.Log("Enemies are still present. Cannot proceed to the next level.");
+            return;
+        }
+
+        // Nếu tất cả điều kiện trên đều thỏa mãn thì tăng level index và load level mới
         SetLevelIndex(levelIndex + 1);
 
-
-
-
-        // Check if the level index is valid
-
-        // C2
+        // Kiểm tra xem level index có vượt quá số lượng level không
         if (levelIndex > levelFiles.Count)
         {
             Debug.Log("No more levels. You win the game!");
@@ -331,7 +346,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        ClearLevel();
+        // Dọn dẹp các đối tượng cũ cần cho level trước khi load level mới
+        ClearForNextLevel();
 
         // Load the new level
         SceneManager.LoadScene(1);

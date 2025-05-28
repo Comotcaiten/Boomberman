@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Animator animator;
 
-    public bool isFainted { get; private set; } = false;
+    public bool isDead { get; private set; } = false;
 
     private Vector2 lastMovePos;
 
@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
     void MoveInput()
     {
-        if (isFainted || !canControl) return;
+        if (isDead || !canControl) return;
 
         animator.SetFloat("horizontal", moveInput.x);
         animator.SetFloat("vertical", moveInput.y);
@@ -68,9 +68,9 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public void SetIsFainted(bool value)
+    public void SetIsDead(bool value)
     {
-        if (isFainted == true) return;
+        if (isDead == true) return;
         if (value == true)
         {
             animator.SetBool("IsDead", true);
@@ -81,14 +81,16 @@ public class PlayerController : MonoBehaviour
             audioSourceEffect.PlayOneShot(playerAudioDeath);
             canControl = false;
         }
-        isFainted = value;
+        isDead = value;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            SetIsFainted(true);
+            SetIsDead(true);
+
+            Physics2D.IgnoreCollision(collision.collider, GetComponent<CircleCollider2D>());
         }
     }
 

@@ -38,8 +38,6 @@ public class BallomEnemy : Enemy
 
     protected override void Change()
     {
-        // int path = Random.Range(0,moveDirs.Length);
-        // moveDir = moveDirs[path];
 
         List<Vector2> validDirs = new List<Vector2>();
         foreach (var dir in moveDirs)

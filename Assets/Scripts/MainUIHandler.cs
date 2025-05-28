@@ -54,7 +54,7 @@ public class MainUIHandler : MonoBehaviour
             SceneManager.LoadScene(0); // Load the menu scene (index 0)
             return;
         }
-        GameManager.Instance.ClearLevel();
+        GameManager.Instance.ClearForNextLevel();
         SceneManager.LoadScene(1); // Load the main scene (index 1)
     }
 
@@ -71,7 +71,7 @@ public class MainUIHandler : MonoBehaviour
             return;
         }
 
-        GameManager.Instance.ClearLevel();
+        GameManager.Instance.ClearForNextLevel();
 
         GameManager.Instance.AssignTilemap(
             GameObject.Find("Destruction").GetComponent<Tilemap>(),
