@@ -7,6 +7,15 @@ public class Flame : MonoBehaviour
     void Start()
     {
         StartCoroutine(DestroyAfter());
+
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.1f);
+        foreach (Collider2D col in hits)
+        {
+            if (col.CompareTag("Item"))
+            {
+                Destroy(col.gameObject);
+            }
+        }
     }
 
     IEnumerator DestroyAfter() {
@@ -33,7 +42,7 @@ public class Flame : MonoBehaviour
         if (collision.gameObject.CompareTag("Bomb"))
         {
             Debug.Log("Hit Bomb");
-            
+
             collision.gameObject.GetComponent<Bomb>().timeDestory = 0f;
         }
     }

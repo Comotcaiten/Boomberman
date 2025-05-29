@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
             spawnChance = value;
             if (spawnChance < 0 || spawnChance > 1)
             {
-                spawnChance = 0.2f; // default value
+                spawnChance = 0.05f; // default value
             }
             if (spawnChance >= 0.45f)
             {

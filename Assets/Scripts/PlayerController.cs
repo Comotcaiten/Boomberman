@@ -37,7 +37,9 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("vertical", moveInput.y);
         animator.SetFloat("speed", (moveInput.x * moveInput.x + moveInput.y * moveInput.y));
 
-        playerRb.MovePosition(playerRb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+        // playerRb.MovePosition(playerRb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+        playerRb.linearVelocity = moveInput * moveSpeed;
+        
 
         if (moveInput != Vector2.zero)
         {
@@ -91,7 +93,7 @@ public class PlayerController : MonoBehaviour
     public void TakeItem(Item item)
     {
         if (item == null) return;
-        item.gameObject.SetActive(false);
+        // item.gameObject.SetActive(false);
         // Thực hiện hiệu ứng của item
         StartCoroutine(item.Effect());
 
