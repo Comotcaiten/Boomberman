@@ -54,6 +54,7 @@ public class MainUIHandler : MonoBehaviour
             SceneManager.LoadScene(0); // Load the menu scene (index 0)
             return;
         }
+        GameManager.Instance.totalscore = 0; // Reset the total score
         GameManager.Instance.ClearForNextLevel();
         SceneManager.LoadScene(1); // Load the main scene (index 1)
     }
