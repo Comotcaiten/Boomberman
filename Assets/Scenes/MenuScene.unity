@@ -1445,7 +1445,6 @@ MonoBehaviour:
   levelFiles:
   - {fileID: 4900000, guid: 05109476d5b2cc3428b4497b1d062ca3, type: 3}
   - {fileID: 4900000, guid: 85dcffd6d00a4a547a3f41fe79c7cfae, type: 3}
-  - {fileID: 4900000, guid: 451e48d0dc9a15d4497a84b63a4fc3db, type: 3}
   totalscore: 0
   inputSettings:
     moveControlType: 2

@@ -1,4 +1,4 @@
-    using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
@@ -10,7 +10,7 @@ public abstract class Enemy : MonoBehaviour
     protected Vector2 moveDir;
     protected Rigidbody2D enenmyRb;
     protected CircleCollider2D collision2D;
-    public bool isFainted { get; private set; } = false;
+    public bool isDead { get; private set; } = false;
 
     [SerializeField] protected Animator animator;
 
@@ -33,13 +33,13 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (isFainted) return;
+        if (isDead) return;
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDir, 0.5f, obstacleLayer);
         if (hit.collider != null && hit.collider != collision2D)
         {
-            Debug.Log($"Hit: {hit.collider.name}");
-            Debug.DrawRay(transform.position, moveDir, Color.red, 1f);
+            // Debug.Log($"Hit: {hit.collider.name}");
+            // Debug.DrawRay(transform.position, moveDir, Color.red, 1f);
 
             moveDir = Vector2.zero;
         }
@@ -93,12 +93,12 @@ public abstract class Enemy : MonoBehaviour
 
     }
 
-    public void SetIsFainted(bool value)
+    public void SetIsDead(bool value)
     {
-        if (isFainted == true) return;
-        isFainted = value;
+        if (isDead == true) return;
+        isDead = value;
 
-        if (isFainted)
+        if (isDead)
         {
             Debug.Log($"Enemy {gameObject.name} đã bị hạ gục");
             StartCoroutine(DeathAfter());

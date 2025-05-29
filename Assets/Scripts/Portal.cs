@@ -13,7 +13,7 @@ public class Portal : MonoBehaviour
                 return;
             }
 
-            if (GameManager.Instance.isGameWin == false) return;
+            if (GameManager.Instance.isGameWin == true) return;
             
             GameManager.Instance.PortalActive();
         }

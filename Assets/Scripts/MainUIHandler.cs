@@ -54,7 +54,7 @@ public class MainUIHandler : MonoBehaviour
             SceneManager.LoadScene(0); // Load the menu scene (index 0)
             return;
         }
-        GameManager.Instance.ClearLevel();
+        GameManager.Instance.ClearForNextLevel();
         SceneManager.LoadScene(1); // Load the main scene (index 1)
     }
 
@@ -71,7 +71,7 @@ public class MainUIHandler : MonoBehaviour
             return;
         }
 
-        GameManager.Instance.ClearLevel();
+        GameManager.Instance.ClearForNextLevel();
 
         GameManager.Instance.AssignTilemap(
             GameObject.Find("Destruction").GetComponent<Tilemap>(),
@@ -101,6 +101,7 @@ public class MainUIHandler : MonoBehaviour
         camFollow.offset = new Vector3(0, -6, -10);
         camFollow.smoothSpeed = 0.125f;
 
+
         GameManager.Instance.LoadLevel();
 
     }
@@ -122,4 +123,5 @@ public class MainUIHandler : MonoBehaviour
         }
         return false;
     }
+
 }
