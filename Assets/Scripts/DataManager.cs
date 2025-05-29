@@ -7,6 +7,8 @@ public static class DataManager
     private const string KEY_BOMB_CONTROL = "PlaceBombControlType";
     private const string KEY_MUSIC_VOLUME = "MusicVolume";
     private const string KEY_SFX_VOLUME = "SFXVolume";
+    private const string KEY_PLAYER_NAME = "PlayerName";
+    private const string KEY_HIGHSCORE = "HighScore";
 
     // 📥 Load
     public static MoveInputController.MoveControlType GetMoveControlType()
@@ -37,6 +39,16 @@ public static class DataManager
         return PlayerPrefs.GetFloat(KEY_SFX_VOLUME, 0.5f);
     }
 
+    public static string GetPlayerName()
+    {
+        return PlayerPrefs.GetString(KEY_PLAYER_NAME, "Player");
+    }
+
+    public static int GetHighScore()
+    {
+        return PlayerPrefs.GetInt(KEY_HIGHSCORE, 0);
+    }
+
     // 💾 Save
     public static void SetMoveControlType(MoveInputController.MoveControlType type)
     {
@@ -59,6 +71,21 @@ public static class DataManager
     public static void SetSFXVolume(float volume)
     {
         PlayerPrefs.SetFloat(KEY_SFX_VOLUME, volume);
+        PlayerPrefs.Save();
+    }
+
+    public static void SetPlayerName(string name)
+    {
+        PlayerPrefs.SetString(KEY_PLAYER_NAME, name);
+        PlayerPrefs.Save();
+    }
+
+    public static void SetHighScore(int score)
+    {
+        if (score < 0) return; // Ensure score is non-negative
+        int currentHighScore = GetHighScore();
+        if (score <= currentHighScore) return; // Only update if the new score is higher
+        PlayerPrefs.SetInt(KEY_HIGHSCORE, score);
         PlayerPrefs.Save();
     }
 
