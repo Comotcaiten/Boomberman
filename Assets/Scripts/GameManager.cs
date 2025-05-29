@@ -3,7 +3,6 @@ using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
-using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -397,7 +396,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Selected item prefab is null!");
+                Debug.Log("Selected item prefab is null!");
             }
         }
     }
