@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.Android.Gradle.Manifest;
 
 public enum SoundType
 {
@@ -36,6 +37,10 @@ public class SoundManager : MonoBehaviour
         sfxSource = gameObject.AddComponent<AudioSource>();
         musicSource = gameObject.AddComponent<AudioSource>();
         musicSource.loop = true;
+
+        // Load volume từ DataManager
+        musicVolume = DataManager.GetMusicVolume();
+        sfxVolume = DataManager.GetSFXVolume();
     }
 
     public static void PlaySound(SoundType type)
@@ -59,10 +64,13 @@ public class SoundManager : MonoBehaviour
     {
         Instance.musicVolume = value;
         Instance.musicSource.volume = value;
+        DataManager.SetMusicVolume(value); // Lưu volume vào DataManager
     }
 
     public static void SetSFXVolume(float value)
     {
         Instance.sfxVolume = value;
+        Instance.sfxSource.volume = value;
+        DataManager.SetSFXVolume(value); // Lưu volume vào DataManager
     }
 }

@@ -18,7 +18,7 @@ public class MoveInputController : InputController
     {
         if (GameManager.Instance != null)
         {
-            moveType = GameManager.Instance.inputSettings.moveControlType; // Get the move control type from GameManager
+            moveType = DataManager.GetMoveControlType(); // Get the move control type from GameManager
             Debug.Log("MoveInputController: Move control type set to " + moveType);
             UpdateUIState();
         }
@@ -39,7 +39,6 @@ public class MoveInputController : InputController
                 if (useControllerMoblieOnly || moveType == MoveControlType.Keyboard)
                 {
                     Debug.Log("Using mobile controller only, but move type is not set to Joystick. Defaulting to Joystick input.");
-                    GameManager.Instance.inputSettings.moveControlType = MoveControlType.Joystick; // Update the setting
                     moveType = MoveControlType.Joystick; // Update the local variable
                     UpdateUIState(); // Update the UI state
                 }

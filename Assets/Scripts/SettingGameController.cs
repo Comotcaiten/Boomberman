@@ -30,13 +30,19 @@ public class SettingGameController : MonoBehaviour
         // Initialize dropdowns
         moveDropdown.ClearOptions();
         moveDropdown.AddOptions(moveControlOptions);
-        moveDropdown.value = (int)GameManager.Instance.inputSettings.moveControlType;
+
+        var moveIndex = moveControlOptions.IndexOf(DataManager.GetMoveControlType().ToString());
+        moveDropdown.value = (int)moveIndex;
+        // moveDropdown.value = moveIndex >= 0 ? moveIndex : 0;
         Debug.Log("Move DropDown: " + moveDropdown.value);
         moveDropdown.onValueChanged.AddListener(OnMoveTypeChanged);
 
         placeBombDropdown.ClearOptions();
         placeBombDropdown.AddOptions(placeBombControlOptions);
-        placeBombDropdown.value = (int)GameManager.Instance.inputSettings.placeBombControlType;
+
+        var bombIndex = placeBombControlOptions.IndexOf(DataManager.GetBombControlType().ToString());
+        // placeBombDropdown.value = bombIndex >= 0 ? bombIndex : 0;
+        placeBombDropdown.value = (int)bombIndex;
         placeBombDropdown.onValueChanged.AddListener(OnPlaceBombControlChanged);
 
         musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
@@ -51,18 +57,24 @@ public class SettingGameController : MonoBehaviour
 
     private void OnMoveTypeChanged(int index)
     {
-        GameManager.Instance.inputSettings.moveControlType = (MoveInputController.MoveControlType)index;
-        moveInputController.moveType = GameManager.Instance.inputSettings.moveControlType;
+        var selectedType = (MoveInputController.MoveControlType)index;
+        DataManager.SetMoveControlType(selectedType);
+
+        moveInputController.moveType = selectedType;
         moveInputController.UpdateUIState();
+
         Debug.Log("Move control changed to: " + moveInputController.moveType);
     }
 
 
     private void OnPlaceBombControlChanged(int index)
     {
-        GameManager.Instance.inputSettings.placeBombControlType = (PlaceBombInputController.PlaceBombControlType)index;
-        placeBombInputController.placeBombType = GameManager.Instance.inputSettings.placeBombControlType;
+        var selectedType = (PlaceBombInputController.PlaceBombControlType)index;
+        DataManager.SetBombControlType(selectedType);
+
+        placeBombInputController.placeBombType = selectedType;
         placeBombInputController.UpdateUIState();
+
         Debug.Log("Place bomb control changed to: " + placeBombInputController.placeBombType);
     }
 
