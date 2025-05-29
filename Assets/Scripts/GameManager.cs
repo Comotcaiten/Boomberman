@@ -3,6 +3,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
     public GameObject powerupBombPrefab;
     public GameObject powerupSpeedPrefab;
     public GameObject portalPrefab;
+
+    private TimeCount timeCount;
 
     public int levelIndex { get; private set; } = 1;
 
@@ -53,7 +56,7 @@ public class GameManager : MonoBehaviour
             spawnChance = value;
             if (spawnChance < 0 || spawnChance > 1)
             {
-                spawnChance = 0.2f; // default value
+                spawnChance = 0.15f; // default value
             }
             if (spawnChance >= 0.45f)
             {
@@ -61,6 +64,10 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    public int itemAmount = 4; // Số lượng item có thể spawn trong màn chơi
+    public int spawnItemAmount;
+    public int maxItemAmount = 10; // Số lượng tối đa item có thể spawn
 
     public InputSettings inputSettings;
 
@@ -81,6 +88,7 @@ public class GameManager : MonoBehaviour
     {
         try
         {
+            spawnItemAmount = itemAmount;
             int rows = 13;
             int columns = 31;
             char[,] map = GenerateRandomMap(rows, columns);
@@ -180,6 +188,13 @@ public class GameManager : MonoBehaviour
         map[1, 2] = ' ';
         map[2, 1] = ' ';
         map[2, 2] = ' ';
+
+        map[1, 3] = '*';
+        map[2, 3] = '*';
+        map[3, 3] = '*';
+        map[3, 1] = '*';
+        map[2, 1] = '*';
+        map[3, 1] = '*';
 
         // Đặt cổng (x) ở vị trí ngẫu nhiên
         Vector2Int portalPos = GetRandomEmptyPosition(map, rows, columns);
@@ -354,31 +369,36 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-
-        int rand = Random.Range(0, 3);
-        GameObject selectedItemPrefab = null;
-
-        switch (rand)
+        if (spawnItemAmount > 0)
         {
-            case 0:
-                selectedItemPrefab = powerupFlamePrefab;
-                break;
-            case 1:
-                selectedItemPrefab = powerupBombPrefab;
-                break;
-            case 2:
-                selectedItemPrefab = powerupSpeedPrefab;
-                break;
-        }
+            int rand = Random.Range(0, 15);
+            GameObject selectedItemPrefab = null;
+            switch (rand)
+            {
+                case 0:
+                    selectedItemPrefab = powerupFlamePrefab;
+                    break;
+                case 1:
+                    selectedItemPrefab = powerupBombPrefab;
+                    break;
+                case 2:
+                    selectedItemPrefab = powerupSpeedPrefab;
+                    break;
+            }
+            if (rand == 0 || rand == 1 || rand == 2)
+            {
+                spawnItemAmount--;
+            }
 
-        if (selectedItemPrefab != null)
-        {
-            Spawn(selectedItemPrefab, worldPos, selectedItemPrefab.name);
-            Debug.Log($"Item {selectedItemPrefab.name} spawned at {worldPos}");
-        }
-        else
-        {
-            Debug.LogError("Selected item prefab is null!");
+            if (selectedItemPrefab != null)
+            {
+                Spawn(selectedItemPrefab, worldPos, selectedItemPrefab.name);
+                Debug.Log($"Item {selectedItemPrefab.name} spawned at {worldPos}");
+            }
+            else
+            {
+                Debug.LogError("Selected item prefab is null!");
+            }
         }
     }
 
@@ -443,12 +463,15 @@ public class GameManager : MonoBehaviour
         totalscore = 0;
         levelIndex = 1;
         spawnChance = 0.2f;
+        itemAmount = 4;
+
     }
 
     private void ClearForGameOver()
     {
         totalscore = 0;
         levelIndex = 1;
+        itemAmount = 4;
     }
 
     private IEnumerator LoadGameOverUI()
@@ -503,7 +526,13 @@ public class GameManager : MonoBehaviour
         SetLevelIndex(levelIndex + 1);
         if (spawnChance < 0.45f)
         {
+            timeCount.elapsedTime += 30f; // Tăng thời gian chơi thêm 30 giây
+            itemAmount += 1;
             spawnChance += 0.025f;
+            if (itemAmount > maxItemAmount)
+            {
+                itemAmount = maxItemAmount;
+            }
         }
         else
         {
