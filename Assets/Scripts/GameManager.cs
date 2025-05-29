@@ -3,6 +3,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -47,6 +48,10 @@ public class GameManager : MonoBehaviour
     private GameObject scoreText;
 
     public int totalscore = 0;
+
+    public float spawnChance; // field
+
+    private float SpawnChance = 0.2f; // 20% chance to spawn an item when a brick is destroyed
 
     public InputSettings inputSettings;
 
@@ -102,6 +107,7 @@ public class GameManager : MonoBehaviour
                     {
                         case '*':
                             SetTile(destructibleTilemap, brickTile, tilePos);
+                            SpawnItemWithBrick(tilePos, worldPos);
                             break;
                         case '#':
                             SetTile(indestructibleTilemap, wallTile, tilePos);
@@ -121,15 +127,15 @@ public class GameManager : MonoBehaviour
                             Spawn(enemyOnealEnemyPrefab, worldPos, "EnemyOneal");
                             // Spawn(enemyBalloomPrefab, worldPos, "EnemyBalloom");
                             break;
-                        case 'b':
-                            SpawnItemWithBrick(powerupBombPrefab, tilePos, worldPos);
-                            break;
-                        case 'f':
-                            SpawnItemWithBrick(powerupFlamePrefab, tilePos, worldPos);
-                            break;
-                        case 's':
-                            SpawnItemWithBrick(powerupSpeedPrefab, tilePos, worldPos);
-                            break;
+                            // case 'b':
+                            //     SpawnItemWithBrick(tilePos, worldPos);
+                            //     break;
+                            // case 'f':
+                            //     SpawnItemWithBrick(tilePos, worldPos);
+                            //     break;
+                            // case 's':
+                            //     SpawnItemWithBrick(tilePos, worldPos);
+                            //     break;
 
                     }
                     SetTile(grassTilemap, grassTile, tilePos); // luôn vẽ grass dưới cùng
@@ -215,10 +221,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SpawnItemWithBrick(GameObject itemPrefab, Vector3Int tilePos, Vector3 worldPos)
+    private void SpawnItemWithBrick(Vector3Int tilePos, Vector3 worldPos)
     {
         SetTile(destructibleTilemap, brickTile, tilePos);
-        Spawn(itemPrefab, worldPos, itemPrefab.name);
+
+        // Tỷ lệ spawn item, ví dụ 20% (có thể điều chỉnh)
+        if (Random.value > SpawnChance) // Nếu Random.value > 0.2, tức 80% không spawn
+        {
+            return;
+        }
+
+        // Chọn ngẫu nhiên một loại item
+        int rand = Random.Range(0, 3);
+        GameObject selectedItemPrefab = null;
+
+        switch (rand)
+        {
+            case 0:
+                selectedItemPrefab = powerupFlamePrefab;
+                break;
+            case 1:
+                selectedItemPrefab = powerupBombPrefab;
+                break;
+            case 2:
+                selectedItemPrefab = powerupSpeedPrefab;
+                break;
+        }
+
+        if (selectedItemPrefab != null)
+        {
+            Spawn(selectedItemPrefab, worldPos, selectedItemPrefab.name);
+            Debug.Log($"Item {selectedItemPrefab.name} spawned at {worldPos}");
+        }
     }
 
     public void SetLevelIndex(int index)
@@ -295,7 +329,6 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
         isGameWin = false;
         enemies.Clear();
-
     }
 
     private IEnumerator LoadGameOverUI()
@@ -316,7 +349,15 @@ public class GameManager : MonoBehaviour
         UpdateEnemyCount();
 
         SetLevelIndex(levelIndex + 1);
-
+        if (spawnChance < 0.45f)
+        {
+            spawnChance += 0.025f; // Increase spawn chance for the next level
+        }
+        else
+        {
+            spawnChance = 0.45f; // Cap the spawn chance at 45%
+        }
+        // itemAmount += 1; // Increase item amount for the next level
 
 
 
@@ -337,7 +378,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    
+
 }
 
 [System.Serializable]

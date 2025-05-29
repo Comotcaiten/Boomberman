@@ -1441,12 +1441,11 @@ MonoBehaviour:
   powerupBombPrefab: {fileID: 8373931338573904965, guid: 202df4548851ae649a99b0190498febb, type: 3}
   powerupSpeedPrefab: {fileID: 8991287641274983958, guid: 0a74419545373af458749b2cd6d68c79, type: 3}
   portalPrefab: {fileID: 3747782827260994310, guid: 33200d7764e4fb042a8222fdc19c15e7, type: 3}
+  itemAmount: 1
   levelFiles:
   - {fileID: 4900000, guid: 05109476d5b2cc3428b4497b1d062ca3, type: 3}
   - {fileID: 4900000, guid: 85dcffd6d00a4a547a3f41fe79c7cfae, type: 3}
   - {fileID: 4900000, guid: 451e48d0dc9a15d4497a84b63a4fc3db, type: 3}
-  - {fileID: 4900000, guid: 33319de9b5c1b8541beb91c7982efe8d, type: 3}
-  - {fileID: 4900000, guid: 4928c9354206ae14584d5672dec51e85, type: 3}
   totalscore: 0
   inputSettings:
     moveControlType: 2
