@@ -41,21 +41,25 @@ public static class DataManager
     public static void SetMoveControlType(MoveInputController.MoveControlType type)
     {
         PlayerPrefs.SetInt(KEY_MOVE_CONTROL, (int)type);
+        PlayerPrefs.Save();
     }
 
     public static void SetBombControlType(PlaceBombInputController.PlaceBombControlType type)
     {
         PlayerPrefs.SetInt(KEY_BOMB_CONTROL, (int)type);
+        PlayerPrefs.Save();
     }
 
     public static void SetMusicVolume(float volume)
     {
         PlayerPrefs.SetFloat(KEY_MUSIC_VOLUME, volume);
+        PlayerPrefs.Save();
     }
 
     public static void SetSFXVolume(float volume)
     {
         PlayerPrefs.SetFloat(KEY_SFX_VOLUME, volume);
+        PlayerPrefs.Save();
     }
 
     public static void SaveAll()
