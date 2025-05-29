@@ -1323,7 +1323,7 @@ GameObject:
   - component: {fileID: 4921198824768214009}
   - component: {fileID: 600060211984749980}
   m_Layer: 5
-  m_Name: UISetting
+  m_Name: UISettingMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

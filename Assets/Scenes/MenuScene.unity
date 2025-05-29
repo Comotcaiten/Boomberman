@@ -127,6 +127,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 457594039}
     m_Modifications:
+    - target: {fileID: 2027072145367792693, guid: b2ffabf4da0f67c4ca77935759654219, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2027072145367792693, guid: b2ffabf4da0f67c4ca77935759654219, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1555634266768712127, guid: eb2ac387c58eea944a5488a9f86b972e, type: 3}
     - target: {fileID: 5562623973953644917, guid: b2ffabf4da0f67c4ca77935759654219, type: 3}
       propertyPath: settingPanel
       value: 
@@ -138,10 +146,6 @@ PrefabInstance:
     - target: {fileID: 6186508899029100715, guid: b2ffabf4da0f67c4ca77935759654219, type: 3}
       propertyPath: m_Name
       value: UISettingHandle
-      objectReference: {fileID: 0}
-    - target: {fileID: 6186508899029100715, guid: b2ffabf4da0f67c4ca77935759654219, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7552877437919623061, guid: b2ffabf4da0f67c4ca77935759654219, type: 3}
       propertyPath: m_Pivot.x
