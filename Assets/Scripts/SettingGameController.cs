@@ -16,6 +16,15 @@ public class SettingGameController : MonoBehaviour
     public TextMeshProUGUI musicVolumeText;
     public TextMeshProUGUI sfxVolumeText;
 
+    public GameObject wrapperUIController;
+    public GameObject wrapperUISound;
+
+    public Button buttonSound;
+    public Button buttonControls;
+
+    public Color selectedColor = new Color(0.2f, 0.6f, 1f, 1f);
+    public Color unselectedColor = new Color(0.8f, 0.8f, 0.8f, 1f);
+
     List<string> moveControlOptions = new List<string> { "Joystick", "Dpad", "Keyboard" };
     List<string> placeBombControlOptions = new List<string> { "Button", "Area", "Keyboard" };
 
@@ -53,6 +62,12 @@ public class SettingGameController : MonoBehaviour
 
         sfxVolumeSlider.value = SoundManager.Instance.sfxVolume;
         sfxVolumeText.text = (sfxVolumeSlider.value * 100).ToString("F0") + "%"; // Update the text to show percentage
+
+        // First ui setting is sound settings
+        wrapperUIController.SetActive(false);
+        wrapperUISound.SetActive(true);
+        // Set the colors of the buttons
+        SetColorSoundAndControls(true);
     }
 
     private void OnMoveTypeChanged(int index)
@@ -90,4 +105,34 @@ public class SettingGameController : MonoBehaviour
         sfxVolumeText.text = (value * 100).ToString("F0") + "%"; // Update the text to show percentage
     }
 
+    public void OnButtonSound()
+    {
+        // Switch to sound settings
+        wrapperUIController.SetActive(false);
+        wrapperUISound.SetActive(true);
+        // Set the colors of the buttons
+        SetColorSoundAndControls(true);
+    }
+
+    public void OnButtonControls()
+    {
+        wrapperUIController.SetActive(true);
+        wrapperUISound.SetActive(false);
+        // Set the colors of the buttons
+        SetColorSoundAndControls(false);
+    }
+
+    public void SetColorSoundAndControls(bool isSoundSelected)
+    {
+        if (isSoundSelected)
+        {
+            buttonControls.GetComponent<Image>().color = unselectedColor;
+            buttonSound.GetComponent<Image>().color = selectedColor;
+        }
+        else
+        {
+            buttonControls.GetComponent<Image>().color = selectedColor;
+            buttonSound.GetComponent<Image>().color = unselectedColor;
+        }
+    }
 }
