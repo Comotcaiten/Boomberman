@@ -169,7 +169,7 @@ MonoBehaviour:
   speed: 2
   animator: {fileID: 3447027866404588259}
   score: 200
-  bombRemainToKill: 1
+  bombRemainToKill: 2
   spriteRenderer: {fileID: 4046272886879466134}
 --- !u!1 &6288103072940520927
 GameObject:
