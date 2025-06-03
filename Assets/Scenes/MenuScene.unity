@@ -1584,10 +1584,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UISettingV2
       objectReference: {fileID: 0}
-    - target: {fileID: 4971666327859920623, guid: 4626505fd4967cd448913137c48a9d6e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5559142711539711068, guid: 4626505fd4967cd448913137c48a9d6e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
