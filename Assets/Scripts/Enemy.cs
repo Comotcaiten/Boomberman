@@ -25,6 +25,8 @@ public abstract class Enemy : MonoBehaviour
 
     public SpriteRenderer spriteRenderer;
 
+    private bool isInvulnerable = false;
+
     protected virtual void Start()
     {
         ScorePoint = FindAnyObjectByType<Score>();
@@ -144,7 +146,7 @@ public abstract class Enemy : MonoBehaviour
 
     public void TakeDamage()
     {
-        if (isDead) return;
+        if (isDead || isInvulnerable) return; // Không bị thương khi đang miễn sát thương
         bombAmount--;
         if (bombAmount <= 0)
         {
@@ -159,6 +161,26 @@ public abstract class Enemy : MonoBehaviour
             // Giữ nguyên màu sắc ban đầu, chỉ thay đổi alpha
             spriteRenderer.color = new Color(1f, 1f, 1f, colorValue);
         }
+
+        InvulnerabilityDelay(0.5f);
+        StopForSecondsByFlame(1f);
+    }
+
+    IEnumerator StopForSecondsByFlame(float seconds)
+    {
+        FreezeMovement();
+        transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), 0);
+        // Đặt vận tốc về 0
+        enenmyRb.linearVelocity = Vector2.zero; // Đặt vận tốc về 0
+        yield return new WaitForSeconds(seconds);
+        UnFreezeMovement();
+    }
+
+    private IEnumerator InvulnerabilityDelay(float time)
+    {
+        isInvulnerable = true;
+        yield return new WaitForSeconds(time);
+        isInvulnerable = false;
     }
 
 }

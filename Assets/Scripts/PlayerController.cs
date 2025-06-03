@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
         // playerRb.MovePosition(playerRb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
         playerRb.linearVelocity = moveInput * moveSpeed;
-        
+
 
         if (moveInput != Vector2.zero)
         {
@@ -119,6 +119,12 @@ public class PlayerController : MonoBehaviour
     public void SetMoveInput(Vector2 input)
     {
         moveInput = input;
+    }
+    
+    public void UpdateSpeed(float newSpeed)
+    {
+        speed = newSpeed;
+        moveSpeed = speed;
     }
 
 }
