@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public GameObject powerupFlamePrefab;
     public GameObject powerupBombPrefab;
     public GameObject powerupSpeedPrefab;
+    public GameObject mysteryBoxPrefab;
     public GameObject portalPrefab;
 
     private TimeCount timeCount;
@@ -41,7 +42,6 @@ public class GameManager : MonoBehaviour
     private GameObject gameWinnerUI;
 
     private GameObject player;
-    private GameObject scoreText;
 
     public int totalscore = 0;
 
@@ -383,11 +383,14 @@ public class GameManager : MonoBehaviour
                 case 2:
                     selectedItemPrefab = powerupSpeedPrefab;
                     break;
+                case 3:
+                    selectedItemPrefab = mysteryBoxPrefab;
+                    break;
             }
-            if (rand == 0 || rand == 1 || rand == 2)
+            if (rand < 4)
             {
                 spawnItemAmount--;
-            }
+            }   
 
             if (selectedItemPrefab != null)
             {
