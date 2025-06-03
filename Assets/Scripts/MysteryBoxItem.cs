@@ -18,6 +18,7 @@ public class MysteryBoxItem : Item
     {
 
         if (!isActive) return;
+        if (isDone) return; // If the effect is already done, do nothing
         time += Time.deltaTime;
         if (time >= 0.5f)
         {
@@ -42,26 +43,35 @@ public class MysteryBoxItem : Item
         }
 
         int randomIndex = Random.Range(0, items.Count + 1);
-        if (randomIndex >= items.Count)
-        {
-            randomIndex = items.Count - 1; // Ensure the index is within bounds
-            yield break;
-        }
 
         yield return new WaitForSeconds(2f);
+        isDone = true; // Set the effect as done
 
-        GameObject selectedItem = items[randomIndex];
+        if (randomIndex < items.Count && randomIndex >= 0) // Ensure the index is within bounds
+        {
+            GameObject selectedItem = items[randomIndex];
 
-        // Instantiate the selected item at the player's position
-        // Vector3 playerPosition = GameObject.Find("Player").transform.position;
-        Instantiate(selectedItem, transform.position, Quaternion.identity);
+            // Instantiate the selected item at the player's position
+            // Vector3 playerPosition = GameObject.Find("Player").transform.position;
+            Instantiate(selectedItem, transform.position, Quaternion.identity);
+        }
+        else
+        {
+            // Clear the sprite if no valid item is selected
+            spriteRenderer.sprite = null; 
+            // You luck so bad, no item spawned
+            Debug.Log("You luck so bad, no item spawned");
+        }
 
-        DestroyItem();
+        // DestroyItem();
+        gameObject.SetActive(false); // Deactivate the mystery box item
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") || !isActive)
+        if (isDone) return; // If the effect is already done, do nothing
+        if (isActive) return; // If the item is already active, do nothing
+        if (collision.CompareTag("Player") && isActive == false)
         {
             PlayerController player = collision.GetComponent<PlayerController>();
             if (player == null)

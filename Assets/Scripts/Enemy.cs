@@ -20,6 +20,11 @@ public abstract class Enemy : MonoBehaviour
     private Score ScorePoint;
     protected LayerMask obstacleLayer;
 
+    [Range(1, 100)] public int bombRemainToKill = 1; // Số lượng bom cần để tiêu diệt enemy này
+    private int bombAmount = 0; // Số lượng bom đã sử dụng để tiêu diệt enemy này
+
+    public SpriteRenderer spriteRenderer;
+
     protected virtual void Start()
     {
         ScorePoint = FindAnyObjectByType<Score>();
@@ -28,6 +33,8 @@ public abstract class Enemy : MonoBehaviour
         moveSpeed = speed;
 
         obstacleLayer = LayerMask.GetMask("Obstacle");
+
+        bombAmount = bombRemainToKill;
     }
 
 
@@ -133,6 +140,25 @@ public abstract class Enemy : MonoBehaviour
     {
         enenmyRb.constraints = RigidbodyConstraints2D.None; // Cho phép di chuyển
         moveSpeed = 2f; // Đặt tốc độ về 2
+    }
+
+    public void TakeDamage()
+    {
+        if (isDead) return;
+        bombAmount--;
+        if (bombAmount <= 0)
+        {
+            SetIsDead(true);
+            return;
+        }
+
+        if (spriteRenderer != null)
+        {
+            // Đổi màu nhạt dần theo tổng số bomb đã nhận / tổng bomb cần nhận
+            float colorValue = (float)bombAmount / bombRemainToKill;
+            // Giữ nguyên màu sắc ban đầu, chỉ thay đổi alpha
+            spriteRenderer.color = new Color(1f, 1f, 1f, colorValue);
+        }
     }
 
 }

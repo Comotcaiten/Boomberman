@@ -36,7 +36,8 @@ public class Flame : MonoBehaviour
         {
             Debug.Log("Kill Enemy");
 
-            collision.gameObject.GetComponent<Enemy>().SetIsDead(true);
+            // collision.gameObject.GetComponent<Enemy>().SetIsDead(true);
+            collision.gameObject.GetComponent<Enemy>().TakeDamage();
         }
 
         if (collision.gameObject.CompareTag("Bomb"))
