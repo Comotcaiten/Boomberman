@@ -5,6 +5,7 @@ using UnityEngine;
 public class MysteryBoxItem : Item
 {
     [SerializeField] private List<GameObject> items; // List of items to spawn from the mystery box
+    [SerializeField] private List<GameObject> enemies; // Danh sách prefab quái có thể spawn
     [SerializeField] private SpriteRenderer spriteRenderer; // Reference to the sprite renderer for the item
     [SerializeField] private GameObject GameObjectSpriteRenderer; // Reference to the sprite renderer for the item
 
@@ -35,33 +36,40 @@ public class MysteryBoxItem : Item
 
     public override IEnumerator Effect()
     {
-        // Randomly select an item from the list
-        if (items.Count == 0)
+        // Nếu cả hai đều rỗng thì không làm gì
+        if ((items == null || items.Count == 0) && (enemies == null || enemies.Count == 0))
         {
-            Debug.LogWarning("No items available in the mystery box.");
+            Debug.LogWarning("No items or enemies available in the mystery box.");
             yield break;
         }
 
-        int randomIndex = Random.Range(0, items.Count + 1);
+        int totalChance = items.Count + enemies.Count + 1; // +1 là "xui" không có gì
+        int randomIndex = Random.Range(0, totalChance);
 
         yield return new WaitForSeconds(2f);
-        isDone = true; // Set the effect as done
+        isDone = true;
 
-        if (randomIndex < items.Count && randomIndex >= 0) // Ensure the index is within bounds
+        if (randomIndex < items.Count)
         {
+            // Spawn item
             GameObject selectedItem = items[randomIndex];
-
-            // Instantiate the selected item at the player's position
-            // Vector3 playerPosition = GameObject.Find("Player").transform.position;
             Instantiate(selectedItem, transform.position, Quaternion.identity);
+        }
+        else if (randomIndex < items.Count + enemies.Count)
+        {
+            // Spawn enemy
+            int enemyIndex = randomIndex - items.Count;
+            GameObject selectedEnemy = enemies[enemyIndex];
+            Instantiate(selectedEnemy, transform.position, Quaternion.identity);
+            Debug.Log("Unlucky! An enemy appeared.");
         }
         else
         {
-            // Clear the sprite if no valid item is selected
-            spriteRenderer.sprite = null; 
-            // You luck so bad, no item spawned
-            Debug.Log("You luck so bad, no item spawned");
+            // Xui thật, không có gì cả
+            spriteRenderer.sprite = null;
+            Debug.Log("So unlucky, nothing spawned.");
         }
+
 
         // DestroyItem();
         gameObject.SetActive(false); // Deactivate the mystery box item

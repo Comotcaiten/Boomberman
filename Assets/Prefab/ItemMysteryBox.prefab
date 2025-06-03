@@ -153,6 +153,8 @@ MonoBehaviour:
   - {fileID: 8856045262812515559, guid: f7a0e47ee72bc614d921278d570c2a70, type: 3}
   - {fileID: 8373931338573904965, guid: 202df4548851ae649a99b0190498febb, type: 3}
   - {fileID: 8991287641274983958, guid: 0a74419545373af458749b2cd6d68c79, type: 3}
+  enemies:
+  - {fileID: 3210251903635696120, guid: 2cfc167d454792e45b59c73af8c666a6, type: 3}
   spriteRenderer: {fileID: 5776288866699827526}
   GameObjectSpriteRenderer: {fileID: 1401787728636513931}
 --- !u!50 &6661380089415938266
