@@ -181,6 +181,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -747,7 +760,32 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ManyUi_0: -9837091218308342
+      ManyUi_1: 4135854195492466148
+      ManyUi_10: -5262611105901169262
+      ManyUi_11: 5236787453691248942
+      ManyUi_12: -8066032533153941279
+      ManyUi_13: -1853808284207667946
+      ManyUi_14: -2247858442495300208
+      ManyUi_15: -7760289990526880365
+      ManyUi_16: 3151692381391121304
+      ManyUi_17: 7081605506255121020
+      ManyUi_18: -1262200431634690432
+      ManyUi_19: -4884187216843440183
+      ManyUi_2: -546717252133780078
+      ManyUi_20: 2736009613151313858
+      ManyUi_21: -1841016530758961249
+      ManyUi_22: -647037923935083104
+      ManyUi_23: -6164127134559849600
+      ManyUi_24: 2084313944372029780
+      ManyUi_3: 6531783391597771707
+      ManyUi_4: -5150714989747175848
+      ManyUi_5: -2348942581436758317
+      ManyUi_6: -2838392351816824555
+      ManyUi_7: 6649974563060923290
+      ManyUi_8: 3817175737937920987
+      ManyUi_9: -8076230794977356766
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
