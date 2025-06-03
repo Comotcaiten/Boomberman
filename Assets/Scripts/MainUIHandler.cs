@@ -65,11 +65,6 @@ public class MainUIHandler : MonoBehaviour
         SceneManager.LoadScene(1); // Load the main scene (index 1)
     }
 
-    public void OnNetxLevelButtonClicked()
-    {
-        GameManager.Instance.LoadLevel(); // Load the next level
-    }
-
     private void LoadLevel()
     {
         if (isGameManagerNull())
