@@ -160,6 +160,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -572,7 +585,25 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      UI_Button_0: -2425030085013936299
+      UI_Button_1: -1795766983720310424
+      UI_Button_10: -6176787772818958290
+      UI_Button_11: -4247946234399812423
+      UI_Button_12: -3905998139455355062
+      UI_Button_13: 2639249550997325220
+      UI_Button_14: 4723696133963938211
+      UI_Button_15: 107580637312838252
+      UI_Button_16: -8941853566408569058
+      UI_Button_17: 8524689469136472985
+      UI_Button_2: -7140076687355098256
+      UI_Button_3: 2137667934468242736
+      UI_Button_4: -7828146469850750681
+      UI_Button_5: -8847661192739173968
+      UI_Button_6: 2874618497777919038
+      UI_Button_7: 3020765325753975289
+      UI_Button_8: 8937165880143603352
+      UI_Button_9: 8499969479739734636
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
