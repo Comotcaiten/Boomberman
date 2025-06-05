@@ -5548,13 +5548,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverUI: {fileID: 1024130868}
-  gameWinnerUI: {fileID: 954254587}
   levelLoadUI: {fileID: 432944880}
   UIMoblie: {fileID: 1323345576}
   moveInputController: {fileID: 1881938411}
   placeBombInputController: {fileID: 1881938412}
   mainCamera: {fileID: 519420028}
   player: {fileID: 1740153052}
+  timeCount: {fileID: 1575816806}
 --- !u!114 &1881938411
 MonoBehaviour:
   m_ObjectHideFlags: 0

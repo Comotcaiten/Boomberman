@@ -96,10 +96,6 @@ public abstract class Enemy : MonoBehaviour
 
         // Destroy(gameObject);
         gameObject.SetActive(false);
-
-        // Gọi hàm trong GameManager để cập nhật số lượng kẻ địch còn lại
-        GameManager.Instance.UpdateEnemyCount();
-
     }
 
     public void SetIsDead(bool value)

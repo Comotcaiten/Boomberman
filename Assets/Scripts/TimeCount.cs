@@ -4,7 +4,7 @@ using TMPro;
 public class TimeCount : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timerText;
-    public float elapsedTime = 300f;
+    private float elapsedTime = 300f;
     private bool isRunning = true;
     private PlayerController player;
 

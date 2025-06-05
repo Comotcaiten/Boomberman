@@ -3,6 +3,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,18 +29,14 @@ public class GameManager : MonoBehaviour
     public GameObject mysteryBoxPrefab;
     public GameObject portalPrefab;
 
-    private TimeCount timeCount;
-
     public int levelIndex { get; private set; } = 1;
 
     // In Level
     private List<GameObject> enemies = new List<GameObject>();
 
     private bool isGameOver = false;
-    public bool isGameWin { get; private set; } = false;
 
     private GameObject gameOverUI;
-    private GameObject gameWinnerUI;
 
     private GameObject player;
 
@@ -200,7 +197,8 @@ public class GameManager : MonoBehaviour
         map[portalPos.y, portalPos.x] = 'x';
 
         // Đặt kẻ thù (1, 2) ở các vị trí ngẫu nhiên
-        int enemyCount = Mathf.Min(4 + levelIndex, 8); //Số lượng kẻ thù tăng dần theo mỗi màn chơi tối đa là 8
+        // Số lượng kẻ địch tối thiểu là 4 + n và tối đa là 10
+        int enemyCount = Mathf.Min(4 + levelIndex, 10); //Số lượng kẻ thù tăng dần theo mỗi màn chơi tối đa là 10
         for (int i = 0; i < enemyCount; i++)
         {
             Vector2Int enemyPos = GetRandomEmptyPosition(map, rows, columns);
@@ -290,12 +288,10 @@ public class GameManager : MonoBehaviour
         grassTilemap = grass;
     }
 
-    public void AssignGameUI(GameObject gameOver, GameObject gameWinner)
+    public void AssignGameUI(GameObject gameOver)
     {
         gameOverUI = gameOver;
-        gameWinnerUI = gameWinner;
     }
-
     public void AssignPlayer(GameObject playerObj)
     {
         player = playerObj;
@@ -431,36 +427,21 @@ public class GameManager : MonoBehaviour
         ClearForGameOver();
     }
 
-    public void GameWin()
+    public bool AreAllEnemiesDead()
     {
-        if (isGameWin) return;
-
-        isGameWin = true;
-        Debug.Log("You Win!");
-        StartCoroutine(LoadGameWinnerUI());
-        for (int i = 0; i < enemies.Count; i++)
-        {
-            enemies[i].GetComponent<Enemy>().FreezeMovement();
-        }
+        return enemies.All(enemy => enemy.GetComponent<Enemy>().isDead);
     }
 
-    public void UpdateEnemyCount()
-    {
-        enemies.RemoveAll(enemy => enemy.GetComponent<Enemy>().isDead);
-        Debug.Log($"Enemies count after update: {enemies.Count}");
-    }
 
     public void ClearForNextLevel()
     {
         isGameOver = false;
-        isGameWin = false;
         enemies.Clear();
     }
 
     public void ClearForResetGame()
     {
         isGameOver = false;
-        isGameWin = false;
         enemies.Clear();
         totalscore = 0;
         levelIndex = 1;
@@ -482,7 +463,6 @@ public class GameManager : MonoBehaviour
         if (gameOverUI != null)
         {
             gameOverUI.SetActive(true);
-            gameWinnerUI.SetActive(false);
         }
         else
         {
@@ -490,23 +470,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator LoadGameWinnerUI()
-    {
-        yield return new WaitForSeconds(2f);
-        if (gameWinnerUI != null)
-        {
-            gameWinnerUI.SetActive(true);
-            gameOverUI.SetActive(false);
-        }
-        else
-        {
-            Debug.Log("Game Winner UI is not assigned.");
-        }
-    }
-
     public void PortalActive()
     {
-        UpdateEnemyCount();
         if (player == null)
         {
             Debug.LogError("Player is not assigned. Cannot proceed to the next level.");
@@ -519,16 +484,15 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (enemies.Count > 0)
+        if (!AreAllEnemiesDead())
         {
             Debug.Log("Enemies are still present. Cannot proceed to the next level.");
             return;
         }
 
-        SetLevelIndex(levelIndex + 1);
+        SetLevelIndex(levelIndex + 1);  
         if (spawnChance < 0.45f)
         {
-            timeCount.elapsedTime += 30f; // Tăng thời gian chơi thêm 30 giây
             itemAmount += 1;
             spawnChance += 0.025f;
             if (itemAmount > maxItemAmount)
@@ -539,14 +503,6 @@ public class GameManager : MonoBehaviour
         else
         {
             spawnChance = 0.45f;
-        }
-
-        if (levelIndex > 10)
-        {
-            Debug.Log("No more levels. You win the game!");
-            GameWin();
-            levelIndex = 1;
-            return;
         }
 
         ClearForNextLevel();
@@ -576,15 +532,3 @@ public class InputSettings
         }
     }
 }
-
-// public static class FileLevelLoader
-// {
-//     public static int Rows { get; set; }
-//     public static int Columns { get; set; }
-//     public static string[] MapLines { get; set; }
-
-//     public static void LoadFromText(string text)
-//     {
-//         // Không cần triển khai vì sử dụng map ngẫu nhiên
-//     }
-// }

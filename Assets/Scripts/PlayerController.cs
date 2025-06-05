@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
 
     private bool canControl = true;
 
+    [SerializeField] private bool isImmortal;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -65,8 +67,14 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public bool GetIsImmortal()
+    {
+        return isImmortal;
+    }
+
     public void SetIsDead(bool value)
     {
+        if (isImmortal) return;
         if (isDead == true) return;
         if (value == true)
         {
@@ -78,6 +86,11 @@ public class PlayerController : MonoBehaviour
             canControl = false;
         }
         isDead = value;
+    }
+
+    public void SetMoveInput(Vector2 input)
+    {
+        moveInput = input;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -116,10 +129,6 @@ public class PlayerController : MonoBehaviour
         moveSpeed = speed; // Đặt tốc độ về 5
     }
 
-    public void SetMoveInput(Vector2 input)
-    {
-        moveInput = input;
-    }
     
     public void UpdateSpeed(float newSpeed)
     {
