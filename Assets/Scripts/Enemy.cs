@@ -147,6 +147,8 @@ public abstract class Enemy : MonoBehaviour
         if (bombAmount <= 0)
         {
             SetIsDead(true);
+            InvulnerabilityDelay(0.5f);
+            StopForSecondsByFlame(1f);
             return;
         }
 
