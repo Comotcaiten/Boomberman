@@ -1,0 +1,12 @@
+# ninja log v5
+51	505	7712305201593736	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	7666d94f1fe2dc99
+506	1859	7712305211678249	E:/GitHub/BomberGame Mobile/Boomberman/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/4g1u3065/obj/arm64-v8a/libswappywrapper.so	be78be4fb40a416a
+11	4029	7712305236104291	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	4a19ae1412670b7a
+16	4088	7712305235999090	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	e90accafb2ce6c33
+45	4113	7712305237354629	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	2d7ecb5f08493489
+27	4411	7712305239933038	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	11eab3e7a86b4c80
+39	4415	7712305239878048	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	298138d1e73ab7c9
+23	4517	7712305242189003	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	cac3d51da114a26e
+33	4943	7712305246443701	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	2ac8fee0ad9993
+2	5116	7712305248121436	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	23239aba824e9887
+5116	5243	7712305249452227	E:/GitHub/BomberGame Mobile/Boomberman/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/4g1u3065/obj/arm64-v8a/libgame.so	a2e0217c330592ba
