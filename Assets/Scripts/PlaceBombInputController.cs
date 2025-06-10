@@ -19,7 +19,7 @@ public class PlaceBombInputController : InputController
     {
         if (GameManager.Instance != null)
         {
-            placeBombType = GameManager.Instance.inputSettings.placeBombControlType; // Get the place bomb control type from GameManager
+            placeBombType = DataManager.GetBombControlType(); // Get the place bomb control type from GameManager
             Debug.Log("PlaceBombInputController: Place bomb control type set to " + placeBombType);
             UpdateUIState();
         }
@@ -29,6 +29,7 @@ public class PlaceBombInputController : InputController
         }
         
     }
+    
 
     void Update()
     {
@@ -38,7 +39,6 @@ public class PlaceBombInputController : InputController
         if (useControllerMoblieOnly || placeBombType == PlaceBombControlType.Keyboard)
         {
             Debug.Log("Using mobile controller only, but place bomb type is not set to Area. Defaulting to Area input.");
-            GameManager.Instance.inputSettings.placeBombControlType = PlaceBombControlType.Area; // Update the setting
             placeBombType = PlaceBombControlType.Area; // Update the local variable
             UpdateUIState(); // Update the UI state
         }

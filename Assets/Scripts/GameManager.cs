@@ -3,6 +3,7 @@ using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
     public GameObject powerupFlamePrefab;
     public GameObject powerupBombPrefab;
     public GameObject powerupSpeedPrefab;
+    public GameObject mysteryBoxPrefab;
     public GameObject portalPrefab;
 
     public int levelIndex { get; private set; } = 1;
@@ -32,25 +34,41 @@ public class GameManager : MonoBehaviour
     // In Level
     private List<GameObject> enemies = new List<GameObject>();
 
-    public bool isGameOver { get; private set; }= false;
-    public bool isGameWin { get; private set; } = false;
+    private bool isGameOver = false;
 
     private GameObject gameOverUI;
-    private GameObject gameWinnerUI;
-
-    [SerializeField] private List<TextAsset> levelFiles;
 
     private GameObject player;
-    private GameObject scoreText;
 
     public int totalscore = 0;
 
-    public InputSettings inputSettings;
+    public float spawnChance = 0.2f; // field
 
+    public float SpawnChance
+    {
+        get { return spawnChance; }
+        set
+        {
+            spawnChance = value;
+            if (spawnChance < 0 || spawnChance > 1)
+            {
+                spawnChance = 0.15f; // default value
+            }
+            if (spawnChance >= 0.45f)
+            {
+                spawnChance = 0.45f; // cap value
+            }
+        }
+    }
+
+    public int itemAmount = 4; // Số lượng item có thể spawn trong màn chơi
+    public int spawnItemAmount;
+    public int maxItemAmount = 10; // Số lượng tối đa item có thể spawn
+
+    public InputSettings inputSettings;
 
     private void Awake()
     {
-
         if (Instance != null)
         {
             Destroy(gameObject);
@@ -60,41 +78,43 @@ public class GameManager : MonoBehaviour
         Instance = this;
         Instance.inputSettings = new InputSettings();
         DontDestroyOnLoad(gameObject);
-
     }
 
     public void LoadLevel()
     {
-
         try
         {
-            // C2
-            if (levelIndex - 1 < 0 || levelIndex - 1 >= levelFiles.Count)
+            spawnItemAmount = itemAmount;
+            int rows = 13;
+            int columns = 31;
+            char[,] map = GenerateRandomMap(rows, columns);
+
+            FileLevelLoader.Rows = rows;
+            FileLevelLoader.Columns = columns;
+            FileLevelLoader.MapLines = new string[rows];
+            for (int row = 0; row < rows; row++)
             {
-                Debug.LogError("Invalid level index or level file not assigned.");
-                return;
+                char[] rowChars = new char[columns];
+                for (int col = 0; col < columns; col++)
+                {
+                    rowChars[col] = map[row, col];
+                }
+                FileLevelLoader.MapLines[row] = new string(rowChars);
             }
 
-            TextAsset levelFile = levelFiles[levelIndex - 1];
-            FileLevelLoader.LoadFromText(levelFile.text);
-
-
-            for (int row = 0; row < FileLevelLoader.Rows; row++)
+            for (int row = 0; row < rows; row++)
             {
-                for (int col = 0; col < FileLevelLoader.Columns; col++)
+                for (int col = 0; col < columns; col++)
                 {
-                    char type = FileLevelLoader.MapLines[row][col];
-
-                    // do để offset của Grid Tilemap là 0.5 nên phải để trừ 1 (làm tròn 0.5)
+                    char type = map[row, col];
                     Vector3Int tilePos = new Vector3Int(col - 1, -row - 1, 0);
-
-                    // Cái này là để cho các đối tượng spawn ra có vị trí đúng
                     Vector3 worldPos = new Vector3(col, -row, 0);
 
                     switch (type)
                     {
                         case '*':
                             SetTile(destructibleTilemap, brickTile, tilePos);
+                            SpawnItemWithBrick(tilePos, worldPos);
                             break;
                         case '#':
                             SetTile(indestructibleTilemap, wallTile, tilePos);
@@ -104,7 +124,6 @@ public class GameManager : MonoBehaviour
                             SetTile(destructibleTilemap, brickTile, tilePos);
                             break;
                         case 'p':
-                            // Spawn(playerPrefab, worldPos, "Player");
                             SetUpPlayer(playerPrefab, worldPos);
                             break;
                         case '1':
@@ -112,27 +131,154 @@ public class GameManager : MonoBehaviour
                             break;
                         case '2':
                             Spawn(enemyOnealEnemyPrefab, worldPos, "EnemyOneal");
-                            // Spawn(enemyBalloomPrefab, worldPos, "EnemyBalloom");
                             break;
-                        case 'b':
-                            SpawnItemWithBrick(powerupBombPrefab, tilePos, worldPos);
-                            break;
-                        case 'f':
-                            SpawnItemWithBrick(powerupFlamePrefab, tilePos, worldPos);
-                            break;
-                        case 's':
-                            SpawnItemWithBrick(powerupSpeedPrefab, tilePos, worldPos);
-                            break;
-
                     }
-                    SetTile(grassTilemap, grassTile, tilePos); // luôn vẽ grass dưới cùng
+                    SetTile(grassTilemap, grassTile, tilePos);
                 }
             }
+
+            Debug.Log($"Random map generated for level {levelIndex}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"Failed to load level: {e.Message}");
+            Debug.LogError($"Failed to generate map: {e.Message}");
         }
+    }
+
+    private char[,] GenerateRandomMap(int rows, int columns)
+    {
+        char[,] map = new char[rows, columns];
+
+        // Khởi tạo toàn bộ bản đồ là cỏ (' ')
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < columns; col++)
+            {
+                map[row, col] = ' ';
+            }
+        }
+
+        // Đặt tường không thể phá hủy (#) ở biên
+        for (int row = 0; row < rows; row++)
+        {
+            map[row, 0] = '#';
+            map[row, columns - 1] = '#';
+        }
+        for (int col = 0; col < columns; col++)
+        {
+            map[0, col] = '#';
+            map[rows - 1, col] = '#';
+        }
+
+        // Đặt tường không thể phá hủy (#) ở lưới 2x2
+        for (int row = 2; row < rows - 1; row += 2)
+        {
+            for (int col = 2; col < columns - 1; col += 2)
+            {
+                map[row, col] = '#';
+            }
+        }
+
+        // Đặt người chơi (p) ở góc trên bên trái
+        map[1, 1] = 'p';
+        map[1, 2] = ' ';
+        map[2, 1] = ' ';
+        map[2, 2] = ' ';
+
+        map[1, 3] = '*';
+        map[2, 3] = '*';
+        map[3, 3] = '*';
+        map[3, 1] = '*';
+        map[2, 1] = '*';
+        map[3, 1] = '*';
+
+        // Đặt cổng (x) ở vị trí ngẫu nhiên
+        Vector2Int portalPos = GetRandomEmptyPosition(map, rows, columns);
+        map[portalPos.y, portalPos.x] = 'x';
+
+        // Đặt kẻ thù (1, 2) ở các vị trí ngẫu nhiên
+        // Số lượng kẻ địch tối thiểu là 4 + n và tối đa là 10
+        int enemyCount = Mathf.Min(4 + levelIndex, 10); //Số lượng kẻ thù tăng dần theo mỗi màn chơi tối đa là 10
+        for (int i = 0; i < enemyCount; i++)
+        {
+            Vector2Int enemyPos = GetRandomEmptyPosition(map, rows, columns);
+            map[enemyPos.y, enemyPos.x] = (i % 2 == 0) ? '1' : '2';
+        }
+
+        // Đặt gạch có thể phá hủy (*) ở các vị trí ngẫu nhiên, trừ vùng an toàn quanh người chơi
+        float brickChance = 0.5f;
+        for (int row = 1; row < rows - 1; row++)
+        {
+            for (int col = 1; col < columns - 1; col++)
+            {
+                // Chỉ đặt gạch ở các ô trống và không nằm trong vùng an toàn (1,2), (2,1), (2,2), (1,3), (2,3), (3,1), (3,2)
+                if (map[row, col] == ' ' && 
+                    !(row == 1 && col == 2) && 
+                    !(row == 2 && col == 1) && 
+                    !(row == 2 && col == 2) && 
+                    !(row == 1 && col == 3) && 
+                    !(row == 2 && col == 3) && 
+                    !(row == 3 && col == 1) && 
+                    !(row == 3 && col == 2))
+                {
+                    if (Random.value < brickChance)
+                    {
+                        map[row, col] = '*';
+                    }
+                }
+            }
+        }
+
+        // In bản đồ ra Console để debug
+        DebugMap(map, rows, columns);
+
+        return map;
+    }
+
+    private Vector2Int GetRandomEmptyPosition(char[,] map, int rows, int columns)
+    {
+        List<Vector2Int> emptyPositions = new List<Vector2Int>();
+        for (int row = 1; row < rows - 1; row++)
+        {
+            for (int col = 1; col < columns - 1; col++)
+            {
+                // Chỉ thêm các ô trống và không nằm trong vùng an toàn (1,2), (2,1), (2,2), (1,3), (2,3), (3,1), (3,2)
+                if (map[row, col] == ' ' && 
+                    !(row == 1 && col == 2) && 
+                    !(row == 2 && col == 1) && 
+                    !(row == 2 && col == 2) && 
+                    !(row == 1 && col == 3) && 
+                    !(row == 2 && col == 3) && 
+                    !(row == 3 && col == 1) && 
+                    !(row == 3 && col == 2))
+                {
+                    emptyPositions.Add(new Vector2Int(col, row));
+                }
+            }
+        }
+
+        if (emptyPositions.Count == 0)
+        {
+            Debug.LogError("No empty positions available for spawning!");
+            return new Vector2Int(1, 1);
+        }
+
+        int index = Random.Range(0, emptyPositions.Count);
+        return emptyPositions[index];
+    }
+
+    private void DebugMap(char[,] map, int rows, int columns)
+    {
+        string mapString = "";
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < columns; col++)
+            {
+                mapString += map[row, col];
+            }
+            mapString += "\n";
+        }
+        Debug.Log("Generated Map:\n" + mapString);
     }
 
     public void AssignTilemap(Tilemap destruct, Tilemap indestruct, Tilemap grass)
@@ -142,12 +288,10 @@ public class GameManager : MonoBehaviour
         grassTilemap = grass;
     }
 
-    public void AssignGameUI(GameObject gameOver, GameObject gameWinner)
+    public void AssignGameUI(GameObject gameOver)
     {
         gameOverUI = gameOver;
-        gameWinnerUI = gameWinner;
     }
-
     public void AssignPlayer(GameObject playerObj)
     {
         player = playerObj;
@@ -155,7 +299,6 @@ public class GameManager : MonoBehaviour
 
     private void SetTile(Tilemap tilemap, Tile tile, Vector3Int pos)
     {
-
         if (tilemap == null)
         {
             Debug.LogError("Tilemap is not assigned.");
@@ -166,9 +309,14 @@ public class GameManager : MonoBehaviour
 
     private void Spawn(GameObject prefab, Vector3 pos, string name)
     {
+        if (prefab == null)
+        {
+            Debug.LogError($"Prefab for {name} is null!");
+            return;
+        }
         var obj = Instantiate(prefab, pos, Quaternion.identity);
         obj.name = name;
-        // Debug.Log($"{name} spawned at {pos}");
+        Debug.Log($"{name} spawned at {pos}");
 
         if (prefab.CompareTag("Enemy"))
         {
@@ -208,10 +356,48 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SpawnItemWithBrick(GameObject itemPrefab, Vector3Int tilePos, Vector3 worldPos)
+    private void SpawnItemWithBrick(Vector3Int tilePos, Vector3 worldPos)
     {
         SetTile(destructibleTilemap, brickTile, tilePos);
-        Spawn(itemPrefab, worldPos, itemPrefab.name);
+
+        if (Random.value > SpawnChance)
+        {
+            return;
+        }
+        if (spawnItemAmount > 0)
+        {
+            int rand = Random.Range(0, 15);
+            GameObject selectedItemPrefab = null;
+            switch (rand)
+            {
+                case 0:
+                    selectedItemPrefab = powerupFlamePrefab;
+                    break;
+                case 1:
+                    selectedItemPrefab = powerupBombPrefab;
+                    break;
+                case 2:
+                    selectedItemPrefab = powerupSpeedPrefab;
+                    break;
+                case 3:
+                    selectedItemPrefab = mysteryBoxPrefab;
+                    break;
+            }
+            if (rand < 4)
+            {
+                spawnItemAmount--;
+            }   
+
+            if (selectedItemPrefab != null)
+            {
+                Spawn(selectedItemPrefab, worldPos, selectedItemPrefab.name);
+                Debug.Log($"Item {selectedItemPrefab.name} spawned at {worldPos}");
+            }
+            else
+            {
+                Debug.Log("Selected item prefab is null!");
+            }
+        }
     }
 
     public void SetLevelIndex(int index)
@@ -222,7 +408,6 @@ public class GameManager : MonoBehaviour
             return;
         }
         levelIndex = index;
-
         Debug.Log($"Level index set to {levelIndex}");
     }
 
@@ -232,8 +417,6 @@ public class GameManager : MonoBehaviour
 
         isGameOver = true;
         Debug.Log("Game Over!");
-        // Handle game over logic here (e.g., show game over screen, reset level, etc.)
-
         StartCoroutine(LoadGameOverUI());
 
         for (int i = 0; i < enemies.Count; i++)
@@ -241,48 +424,37 @@ public class GameManager : MonoBehaviour
             enemies[i].GetComponent<Enemy>().FreezeMovement();
         }
 
-        ClearForResetGame();
+        ClearForGameOver();
     }
 
-    public void GameWin()
+    public bool AreAllEnemiesDead()
     {
-        if (isGameWin) return;
-
-        isGameWin = true;
-        Debug.Log("You Win!");
-
-        // Handle game win logic here (e.g., show win screen, load next level, etc.)
-        StartCoroutine(LoadGameWinnerUI());
-        for (int i = 0; i < enemies.Count; i++)
-        {
-            enemies[i].GetComponent<Enemy>().FreezeMovement();
-        }
-
-        ClearForResetGame();
+        return enemies.All(enemy => enemy.GetComponent<Enemy>().isDead);
     }
 
-    public void UpdateEnemyCount()
-    {
-        enemies.RemoveAll(enemy => enemy.GetComponent<Enemy>().isDead);
-        Debug.Log($"Enemies count after update: {enemies.Count}");
-    }
 
     public void ClearForNextLevel()
     {
         isGameOver = false;
-        isGameWin = false;
         enemies.Clear();
-
     }
 
     public void ClearForResetGame()
     {
-        // Dọn dẹp các đối tượng cần thiết cho game over
+        isGameOver = false;
+        enemies.Clear();
         totalscore = 0;
         levelIndex = 1;
-        isGameOver = false;
-        isGameWin = false;
-        enemies.Clear();
+        spawnChance = 0.2f;
+        itemAmount = 4;
+
+    }
+
+    private void ClearForGameOver()
+    {
+        totalscore = 0;
+        levelIndex = 1;
+        itemAmount = 4;
     }
 
     private IEnumerator LoadGameOverUI()
@@ -291,7 +463,6 @@ public class GameManager : MonoBehaviour
         if (gameOverUI != null)
         {
             gameOverUI.SetActive(true);
-            gameWinnerUI.SetActive(false);
         }
         else
         {
@@ -299,26 +470,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator LoadGameWinnerUI()
-    {
-        yield return new WaitForSeconds(2f);
-        if (gameWinnerUI != null)
-        {
-            gameWinnerUI.SetActive(true);
-            gameOverUI.SetActive(false);
-        }
-        else
-        {
-            Debug.Log("Game Winner UI is not assigned.");
-        }
-    }
-
     public void PortalActive()
     {
-        // Đầu tiên kiểm tra player và enemies
-        // Cập nhập số lượng kẻ thù còn lại trước
-        UpdateEnemyCount();
-        // Nếu player không chết và không còn kẻ thù nào thì mới cho phép đi qua cổng
         if (player == null)
         {
             Debug.LogError("Player is not assigned. Cannot proceed to the next level.");
@@ -331,32 +484,30 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (enemies.Count > 0)
+        if (!AreAllEnemiesDead())
         {
             Debug.Log("Enemies are still present. Cannot proceed to the next level.");
             return;
         }
 
-        // Nếu tất cả điều kiện trên đều thỏa mãn thì tăng level index và load level mới
-        SetLevelIndex(levelIndex + 1);
-
-        // Kiểm tra xem level index có vượt quá số lượng level không
-        if (levelIndex > levelFiles.Count)
+        SetLevelIndex(levelIndex + 1);  
+        if (spawnChance < 0.45f)
         {
-            Debug.Log("No more levels. You win the game!");
-            GameWin();
-            levelIndex = 1;
-            return;
+            itemAmount += 1;
+            spawnChance += 0.025f;
+            if (itemAmount > maxItemAmount)
+            {
+                itemAmount = maxItemAmount;
+            }
+        }
+        else
+        {
+            spawnChance = 0.45f;
         }
 
-        // Dọn dẹp các đối tượng cũ cần cho level trước khi load level mới
         ClearForNextLevel();
-
-        // Load the new level
         SceneManager.LoadScene(1);
     }
-
-    
 }
 
 [System.Serializable]
@@ -367,16 +518,15 @@ public class InputSettings
 
     public InputSettings()
     {
-        // Default constructor
         if (PlatformUtils.IsMobilePlatform())
         {
-            // Debug.Log("Mobile platform detected. Setting default input types.");
+            Debug.Log("Mobile platform detected. Setting default input types.");
             moveControlType = MoveInputController.MoveControlType.Joystick;
             placeBombControlType = PlaceBombInputController.PlaceBombControlType.Button;
         }
         else
         {
-            // Debug.Log("Non-mobile platform detected. Setting default input types.");
+            Debug.Log("Non-mobile platform detected. Setting default input types.");
             moveControlType = MoveInputController.MoveControlType.Keyboard;
             placeBombControlType = PlaceBombInputController.PlaceBombControlType.Keyboard;
         }

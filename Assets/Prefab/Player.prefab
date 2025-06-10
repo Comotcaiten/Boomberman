@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bombPrefab: {fileID: 1555995949513353589, guid: 05bccb5b4e1e4aa40af450bc54f6d079, type: 3}
-  bombAmount: 100
+  bombAmount: 1
   bombRange: 1
   bombsPos: []
 --- !u!1 &2387916163985287866

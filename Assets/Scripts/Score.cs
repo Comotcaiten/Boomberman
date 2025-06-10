@@ -21,5 +21,7 @@ public class Score : MonoBehaviour
         GameManager.Instance.totalscore += score;
         Debug.Log("Score: " + GameManager.Instance.totalscore.ToString());
         scoreText.text = "Score: " + GameManager.Instance.totalscore.ToString();
+
+        DataManager.SetHighScore(GameManager.Instance.totalscore);
     }
 }

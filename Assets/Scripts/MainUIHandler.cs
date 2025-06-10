@@ -7,7 +7,6 @@ using System.Collections;
 public class MainUIHandler : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverUI;
-    [SerializeField] private GameObject gameWinnerUI;
     [SerializeField] private GameObject levelLoadUI;
     [SerializeField] private GameObject UIMoblie;
 
@@ -65,11 +64,6 @@ public class MainUIHandler : MonoBehaviour
         SceneManager.LoadScene(1); // Load the main scene (index 1)
     }
 
-    public void OnNetxLevelButtonClicked()
-    {
-        GameManager.Instance.LoadLevel(); // Load the next level
-    }
-
     private void LoadLevel()
     {
         if (isGameManagerNull())
@@ -86,28 +80,18 @@ public class MainUIHandler : MonoBehaviour
             GameObject.Find("Floor").GetComponent<Tilemap>()
         );
 
-        GameManager.Instance.AssignGameUI(gameOverUI, gameWinnerUI);
+        GameManager.Instance.AssignGameUI(gameOverUI);
         gameOverUI.SetActive(false);
-        gameWinnerUI.SetActive(false);
 
         GameManager.Instance.AssignPlayer(player);
 
         moveInputController.BindPlayer(player);
         placeBombInputController.BindPlayer(player);
 
-        // if (IsMobilePlatform())
-        // {
-        //     camFollow = mainCamera.AddComponent<CameraFollow>();
-        //     camFollow.player = GameObject.FindGameObjectWithTag("Player");
-        //     camFollow.offset = new Vector3(0, 0, -20);
-        //     camFollow.smoothSpeed = 0.125f;
-        // }
-
         camFollow = mainCamera.AddComponent<CameraFollow>();
         camFollow.player = GameObject.FindGameObjectWithTag("Player");
         camFollow.offset = new Vector3(0, -6, -10);
         camFollow.smoothSpeed = 0.125f;
-
 
         GameManager.Instance.LoadLevel();
 

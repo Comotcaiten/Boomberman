@@ -20,6 +20,13 @@ public abstract class Enemy : MonoBehaviour
     private Score ScorePoint;
     protected LayerMask obstacleLayer;
 
+    [Range(1, 100)] public int bombRemainToKill = 1; // Số lượng bom cần để tiêu diệt enemy này
+    private int bombAmount = 0; // Số lượng bom đã sử dụng để tiêu diệt enemy này
+
+    public SpriteRenderer spriteRenderer;
+
+    private bool isInvulnerable = false;
+
     protected virtual void Start()
     {
         ScorePoint = FindAnyObjectByType<Score>();
@@ -28,6 +35,8 @@ public abstract class Enemy : MonoBehaviour
         moveSpeed = speed;
 
         obstacleLayer = LayerMask.GetMask("Obstacle");
+
+        bombAmount = bombRemainToKill;
     }
 
 
@@ -87,10 +96,6 @@ public abstract class Enemy : MonoBehaviour
 
         // Destroy(gameObject);
         gameObject.SetActive(false);
-
-        // Gọi hàm trong GameManager để cập nhật số lượng kẻ địch còn lại
-        GameManager.Instance.UpdateEnemyCount();
-
     }
 
     public void SetIsDead(bool value)
@@ -133,6 +138,47 @@ public abstract class Enemy : MonoBehaviour
     {
         enenmyRb.constraints = RigidbodyConstraints2D.None; // Cho phép di chuyển
         moveSpeed = 2f; // Đặt tốc độ về 2
+    }
+
+    public void TakeDamage()
+    {
+        if (isDead || isInvulnerable) return; // Không bị thương khi đang miễn sát thương
+        bombAmount--;
+        if (bombAmount <= 0)
+        {
+            SetIsDead(true);
+            InvulnerabilityDelay(0.5f);
+            StopForSecondsByFlame(1f);
+            return;
+        }
+
+        if (spriteRenderer != null)
+        {
+            // Đổi màu nhạt dần theo tổng số bomb đã nhận / tổng bomb cần nhận
+            float colorValue = (float)bombAmount / bombRemainToKill;
+            // Giữ nguyên màu sắc ban đầu, chỉ thay đổi alpha
+            spriteRenderer.color = new Color(1f, 1f, 1f, colorValue);
+        }
+
+        InvulnerabilityDelay(0.5f);
+        StopForSecondsByFlame(1f);
+    }
+
+    IEnumerator StopForSecondsByFlame(float seconds)
+    {
+        FreezeMovement();
+        transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), 0);
+        // Đặt vận tốc về 0
+        enenmyRb.linearVelocity = Vector2.zero; // Đặt vận tốc về 0
+        yield return new WaitForSeconds(seconds);
+        UnFreezeMovement();
+    }
+
+    private IEnumerator InvulnerabilityDelay(float time)
+    {
+        isInvulnerable = true;
+        yield return new WaitForSeconds(time);
+        isInvulnerable = false;
     }
 
 }

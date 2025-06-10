@@ -4,18 +4,15 @@ public class Portal : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (!collision.CompareTag("Player")) return;
+
+        if (GameManager.Instance == null)
         {
-            if (GameManager.Instance == null)
-            {
-                Debug.Log("GameManager instance is null. Make sure GameManager is initialized.");
-
-                return;
-            }
-
-            if (GameManager.Instance.isGameWin == true) return;
-            
-            GameManager.Instance.PortalActive();
+            Debug.LogWarning("GameManager instance is null. Make sure GameManager is initialized.");
+            return;
         }
+
+        GameManager.Instance.PortalActive();
     }
+
 }

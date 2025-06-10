@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using TMPro;
 
 public class MenuUIHandler : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI tileHighScore;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         SoundManager.PlaySound(SoundType.MUSIC);
+        tileHighScore.text = "High Score: " + DataManager.GetHighScore().ToString();
     }
 
 
